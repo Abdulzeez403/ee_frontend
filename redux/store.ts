@@ -4,6 +4,7 @@ import coinReducer from "@/redux/features/authSlice";
 import quizReducer from "@/redux/features/quizSlice";
 import businessLogicReducer from "@/redux/features/businessLogic";
 import dailyChallengesReducer from "@/redux/features/dailyChallenge";
+import rewardReducer from "@/redux/features/reward";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     quiz: quizReducer,
     businessLogic: businessLogicReducer,
     dailyChallenges: dailyChallengesReducer,
+    reward: rewardReducer,
   },
 });
 

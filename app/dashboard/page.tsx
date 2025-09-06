@@ -25,13 +25,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import { fetchProfile } from "@/redux/features/authSlice";
 import { useEffect } from "react";
-import { quizAttempt } from "@/redux/features/businessLogic";
-import {
-  checkAttempt,
-  fetchActiveChallenge,
-} from "@/redux/features/dailyChallenge";
+import { fetchActiveChallenge } from "@/redux/features/dailyChallenge";
 import StreakCalendar from "./components/calender";
 import QuizLists from "./components/quizlists";
+import { checkAttempt } from "@/redux/features/businessLogic";
+import { fetchQuizzes } from "@/redux/features/quizSlice";
 
 const rankNames: Record<number, string> = {
   1: "🐣 Rookie Egg",
@@ -44,35 +42,31 @@ const rankNames: Record<number, string> = {
 
 export default function DashboardPage() {
   const { user } = useSelector((state: RootState) => state.auth);
-  const { quiz } = useSelector((state: RootState) => state.quiz);
-  const { active } = useSelector((state: RootState) => state.dailyChallenges);
-  const attempted = useSelector((state: RootState) =>
-    active && active._id
-      ? state.dailyChallenges.attempts[active._id]
-      : undefined
+  const { loading, error, quizzes } = useSelector(
+    (state: RootState) => state.quiz
   );
+  const { active } = useSelector((state: RootState) => state.dailyChallenges);
+  const { attempt } = useSelector((state: RootState) => state.businessLogic);
 
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (active?._id && user?._id) {
-      dispatch(checkAttempt({ userId: user._id, challengeId: active._id }));
+      dispatch(
+        checkAttempt({
+          userId: user._id,
+          referenceId: active._id,
+          type: (active.type as "quiz" | "challenge") || "quiz", // or "challenge"
+        })
+      );
     }
-  }, [active, user]);
+  }, [active, user, dispatch]);
 
   useEffect(() => {
     dispatch(fetchProfile());
     dispatch(fetchActiveChallenge());
+    dispatch(fetchQuizzes());
   }, [dispatch]);
-
-  const handleAttemptQuiz = () => {
-    dispatch(
-      quizAttempt({
-        userId: user?._id ?? "",
-        quizId: quiz?._id ?? "",
-      })
-    );
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50">
@@ -138,7 +132,7 @@ export default function DashboardPage() {
                     </Badge>
                   </div>
                   <h3 className="font-heading font-bold text-2xl mb-1">
-                    ${user?.streak} Days
+                    {user?.streak} Days
                   </h3>
                   <p className="text-white/80">Study Streak</p>
                 </CardContent>
@@ -152,7 +146,7 @@ export default function DashboardPage() {
                       <Coins className="w-6 h-6 text-white" />
                     </div>
                     <Badge className="bg-white/20 text-white border-white/30">
-                      ${user?.coins} today
+                      {user?.coins} today
                     </Badge>
                   </div>
                   <h3 className="font-heading font-bold text-2xl mb-1">
@@ -204,7 +198,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Coins className="w-5 h-5" />
-                        <span>+100 Coins</span>
+                        <span>+20 Coins</span>
                       </div>
                     </div>
                   </div>
@@ -216,15 +210,15 @@ export default function DashboardPage() {
                 </div>
                 <Link
                   href={
-                    attempted ? "#" : `/quiz?id=${active?._id}&type=challenge`
+                    attempt ? "#" : `/quiz?id=${active?._id}&type=challenge`
                   }
                 >
                   <Button
-                    disabled={attempted as any}
+                    disabled={attempt as any}
                     size="lg"
                     className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {attempted ? "Already Attempted" : "Start Challenge"}
+                    {attempt ? "Already Attempted" : "Start Challenge"}
                     <ChevronRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
@@ -233,7 +227,12 @@ export default function DashboardPage() {
 
             {/* Recommended Subjects */}
             <div>
-              <QuizLists />
+              <QuizLists
+                userId={user?._id ?? ""}
+                quizzes={quizzes}
+                loading={loading}
+                error={!!error}
+              />
             </div>
             <div>
               <div className="flex items-center justify-between mb-6">
@@ -429,47 +428,6 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            {/* Study Calendar */}
-            {/* <Card className="border-0 shadow-lg rounded-2xl">
-              <CardHeader>
-                <CardTitle className="font-heading text-lg flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-blue-600" />
-                  This Week
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-7 gap-1 mb-4">
-                  {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
-                    <div
-                      key={i}
-                      className="text-center text-xs font-medium text-gray-500 p-2"
-                    >
-                      {day}
-                    </div>
-                  ))}
-                </div>
-                <div className="grid grid-cols-7 gap-1">
-                  {[1, 2, 3, 4, 5, 6, 7].map((day, i) => (
-                    <div
-                      key={i}
-                      className={`aspect-square rounded-lg flex items-center justify-center text-sm font-medium ${
-                        i < 3
-                          ? "bg-green-500 text-white"
-                          : i === 3
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100 text-gray-400"
-                      }`}
-                    >
-                      {day}
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-600 mt-3 text-center">
-                  🔥 Keep your streak alive! Study today to maintain your 7-day
-                  streak.
-                </p>
-              </CardContent>
-            </Card> */}
             <StreakCalendar
               streak={user?.streak as any}
               lastActivity={user?.lastActivity as any}

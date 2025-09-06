@@ -1,13 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -16,15 +28,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Coins, BookOpen, Gift, Smartphone, Trophy, ShoppingBag, Star, Zap } from "lucide-react"
+} from "@/components/ui/dialog";
+import {
+  Coins,
+  BookOpen,
+  Gift,
+  Smartphone,
+  Trophy,
+  ShoppingBag,
+  Star,
+  Zap,
+} from "lucide-react";
+import AirtimeForm from "./forms/airtime";
+import DataBundleForm from "./forms/dataBundle";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 const rewards = {
   digital: [
     {
       id: 1,
       name: "Premium Study Guide - Mathematics",
-      description: "Comprehensive JAMB Mathematics guide with 500+ practice questions",
+      description:
+        "Comprehensive JAMB Mathematics guide with 500+ practice questions",
       price: 150,
       image: "/mathematics-textbook.png",
       category: "Study Material",
@@ -41,7 +67,8 @@ const rewards = {
     {
       id: 3,
       name: "English Language Practice Tests",
-      description: "50 comprehensive English practice tests with detailed explanations",
+      description:
+        "50 comprehensive English practice tests with detailed explanations",
       price: 120,
       image: "/english-language-book.png",
       category: "Practice Tests",
@@ -49,7 +76,8 @@ const rewards = {
     {
       id: 4,
       name: "Premium Features (1 Month)",
-      description: "Unlock unlimited quizzes, detailed analytics, and priority support",
+      description:
+        "Unlock unlimited quizzes, detailed analytics, and priority support",
       price: 200,
       image: "/premium-app-features.png",
       category: "Premium",
@@ -76,7 +104,8 @@ const rewards = {
     {
       id: 7,
       name: "Study Planner",
-      description: "6-month academic planner with exam countdown and goal tracking",
+      description:
+        "6-month academic planner with exam countdown and goal tracking",
       price: 250,
       image: "/academic-study-planner.png",
       category: "Stationery",
@@ -117,48 +146,59 @@ const rewards = {
       category: "Shopping",
     },
   ],
-}
+};
 
 export default function ShopPage() {
-  const [userCoins, setUserCoins] = useState(450)
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [showSuccess, setShowSuccess] = useState(false)
+  const { user } = useSelector((state: RootState) => state.auth);
+  type RewardItem = {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    image: string;
+    category: string;
+    popular?: boolean;
+  };
+
+  const [selectedItem, setSelectedItem] = useState<RewardItem | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [voucherForm, setVoucherForm] = useState({
     network: "",
     mobileNumber: "",
-  })
-  const [formErrors, setFormErrors] = useState({})
+  });
+  const [formErrors, setFormErrors] = useState({});
 
-  const handlePurchase = (item) => {
-    if (userCoins >= item.price) {
-      if (item.category === "Airtime" || item.category === "Data") {
-        const errors = {}
-        if (!voucherForm.network) errors.network = "Please select a network"
-        if (!voucherForm.mobileNumber) errors.mobileNumber = "Please enter mobile number"
-        else if (!/^0[789][01]\d{8}$/.test(voucherForm.mobileNumber)) {
-          errors.mobileNumber = "Please enter a valid Nigerian mobile number"
-        }
+  // const handlePurchase = (item: any) => {
+  //   if (userCoins >= item.price) {
+  //     if (item.category === "Airtime" || item.category === "Data") {
+  //       const errors = {};
+  //       if (!voucherForm.network) errors.network = "Please select a network";
+  //       if (!voucherForm.mobileNumber)
+  //         errors.mobileNumber = "Please enter mobile number";
+  //       else if (!/^0[789][01]\d{8}$/.test(voucherForm.mobileNumber)) {
+  //         errors.mobileNumber = "Please enter a valid Nigerian mobile number";
+  //       }
 
-        if (Object.keys(errors).length > 0) {
-          setFormErrors(errors)
-          return
-        }
-      }
+  //       if (Object.keys(errors).length > 0) {
+  //         setFormErrors(errors);
+  //         return;
+  //       }
+  //     }
 
-      setUserCoins((prev) => prev - item.price)
-      setSelectedItem(null)
-      setShowSuccess(true)
-      setVoucherForm({ network: "", mobileNumber: "" })
-      setFormErrors({})
-      setTimeout(() => setShowSuccess(false), 3000)
-    }
-  }
+  //     setUserCoins((prev) => prev - item.price);
+  //     setSelectedItem(null);
+  //     setShowSuccess(true);
+  //     setVoucherForm({ network: "", mobileNumber: "" });
+  //     setFormErrors({});
+  //     setTimeout(() => setShowSuccess(false), 3000);
+  //   }
+  // };
 
-  const isVoucher = (item) => {
-    return item && (item.category === "Airtime" || item.category === "Data")
-  }
+  const isVoucher = (item: any) => {
+    return item && (item.category === "Airtime" || item.category === "Data");
+  };
 
-  const RewardCard = ({ item }) => (
+  const RewardCard = ({ item }: any) => (
     <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       <CardHeader className="pb-3">
         <div className="relative">
@@ -177,7 +217,9 @@ export default function ShopPage() {
         <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
           {item.name}
         </CardTitle>
-        <CardDescription className="text-sm text-gray-600">{item.description}</CardDescription>
+        <CardDescription className="text-sm text-gray-600">
+          {item.description}
+        </CardDescription>
       </CardHeader>
       <CardFooter className="pt-0 flex items-center justify-between">
         <div className="flex items-center gap-1 text-yellow-600 font-bold">
@@ -189,20 +231,22 @@ export default function ShopPage() {
             <Button
               size="sm"
               className="bg-blue-600 hover:bg-blue-700"
-              disabled={userCoins < item.price}
+              disabled={(user?.coins ?? 0) < item.price}
               onClick={() => {
-                setSelectedItem(item)
-                setVoucherForm({ network: "", mobileNumber: "" })
-                setFormErrors({})
+                setSelectedItem(item);
+                setVoucherForm({ network: "", mobileNumber: "" });
+                setFormErrors({});
               }}
             >
-              {userCoins < item.price ? "Not Enough Coins" : "Redeem"}
+              {(user?.coins ?? 0) < item.price ? "Not Enough Coins" : "Redeem"}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>
-                {selectedItem && isVoucher(selectedItem) ? "Redeem Voucher" : "Confirm Purchase"}
+                {selectedItem && isVoucher(selectedItem)
+                  ? "Redeem Voucher"
+                  : "Confirm Purchase"}
               </DialogTitle>
               <DialogDescription>
                 {selectedItem && isVoucher(selectedItem)
@@ -219,75 +263,25 @@ export default function ShopPage() {
               />
             </div>
 
-            {selectedItem && isVoucher(selectedItem) && (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="network">Network Provider</Label>
-                  <Select
-                    value={voucherForm.network}
-                    onValueChange={(value) => {
-                      setVoucherForm((prev) => ({ ...prev, network: value }))
-                      setFormErrors((prev) => ({ ...prev, network: "" }))
-                    }}
-                  >
-                    <SelectTrigger className={formErrors.network ? "border-red-500" : ""}>
-                      <SelectValue placeholder="Select your network" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="mtn">MTN</SelectItem>
-                      <SelectItem value="airtel">Airtel</SelectItem>
-                      <SelectItem value="glo">Glo</SelectItem>
-                      <SelectItem value="9mobile">9mobile</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {formErrors.network && <p className="text-sm text-red-500">{formErrors.network}</p>}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="mobile">Mobile Number</Label>
-                  <Input
-                    id="mobile"
-                    type="tel"
-                    placeholder="e.g., 08012345678"
-                    value={voucherForm.mobileNumber}
-                    onChange={(e) => {
-                      setVoucherForm((prev) => ({ ...prev, mobileNumber: e.target.value }))
-                      setFormErrors((prev) => ({ ...prev, mobileNumber: "" }))
-                    }}
-                    className={formErrors.mobileNumber ? "border-red-500" : ""}
-                  />
-                  {formErrors.mobileNumber && <p className="text-sm text-red-500">{formErrors.mobileNumber}</p>}
-                  <p className="text-xs text-gray-500">Enter your 11-digit Nigerian mobile number</p>
-                </div>
-
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    <strong>Network:</strong> {voucherForm.network ? voucherForm.network.toUpperCase() : "Not selected"}
-                  </p>
-                  <p className="text-sm text-blue-800">
-                    <strong>Number:</strong> {voucherForm.mobileNumber || "Not entered"}
-                  </p>
-                  <p className="text-sm text-blue-800">
-                    <strong>Amount:</strong> {selectedItem?.name}
-                  </p>
-                </div>
-              </div>
-            )}
-
             <DialogFooter>
               <Button variant="outline" onClick={() => setSelectedItem(null)}>
                 Cancel
               </Button>
-              <Button onClick={() => handlePurchase(selectedItem)} className="bg-green-600 hover:bg-green-700">
+              <Button
+                onClick={() => console.log("Purchasing....")}
+                className="bg-green-600 hover:bg-green-700"
+              >
                 <Coins className="w-4 h-4 mr-2" />
-                {selectedItem && isVoucher(selectedItem) ? "Redeem Voucher" : "Confirm Purchase"}
+                {selectedItem && isVoucher(selectedItem)
+                  ? "Redeem Voucher"
+                  : "Confirm Purchase"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </CardFooter>
     </Card>
-  )
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -298,13 +292,19 @@ export default function ShopPage() {
             <div className="flex items-center gap-3">
               <ShoppingBag className="w-8 h-8 text-blue-600" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Rewards Shop</h1>
-                <p className="text-gray-600">Redeem your coins for amazing rewards</p>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Rewards Shop
+                </h1>
+                <p className="text-gray-600">
+                  Redeem your coins for amazing rewards
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full">
               <Coins className="w-6 h-6 text-yellow-600" />
-              <span className="font-bold text-yellow-800">{userCoins} Coins</span>
+              <span className="font-bold text-yellow-800">
+                {user?.coins} Coins
+              </span>
             </div>
           </div>
         </div>
@@ -317,7 +317,9 @@ export default function ShopPage() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Trophy className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Purchase Successful!</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              Purchase Successful!
+            </h3>
             <p className="text-gray-600">Your reward will be delivered soon.</p>
           </div>
         </div>
@@ -358,11 +360,32 @@ export default function ShopPage() {
           </TabsContent>
 
           <TabsContent value="vouchers">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {rewards.vouchers.map((item) => (
                 <RewardCard key={item.id} item={item} />
               ))}
-            </div>
+            </div> */}
+
+            <Tabs defaultValue="airtime" className=" ">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger
+                  value="airtime"
+                  className="active:bg-customSecondary"
+                >
+                  Airtime
+                </TabsTrigger>
+                <TabsTrigger className="active:bg-customSecondary" value="data">
+                  Data
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="airtime">
+                <AirtimeForm />
+              </TabsContent>
+              <TabsContent value="data">
+                <DataBundleForm />
+              </TabsContent>
+            </Tabs>
           </TabsContent>
         </Tabs>
 
@@ -371,11 +394,14 @@ export default function ShopPage() {
           <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-90" />
           <h3 className="text-2xl font-bold mb-2">Need More Coins?</h3>
           <p className="text-blue-100 mb-6">
-            Complete more quizzes and maintain your study streak to earn coins faster!
+            Complete more quizzes and maintain your study streak to earn coins
+            faster!
           </p>
-          <Button className="bg-white text-blue-600 hover:bg-gray-100 font-semibold">Take a Quiz Now</Button>
+          <Button className="bg-white text-blue-600 hover:bg-gray-100 font-semibold">
+            Take a Quiz Now
+          </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

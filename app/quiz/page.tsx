@@ -9,7 +9,6 @@ import QuizHeader from "./components/quizHeader";
 import QuizActive from "./components/quizActive";
 import QuizResults from "./components/quizResult";
 import QuizStart from "./components/quizStart";
-import { attemptChallenge } from "@/redux/features/dailyChallenge";
 import { useSearchParams } from "next/navigation";
 
 function QuizPage() {
@@ -91,24 +90,14 @@ function QuizPage() {
     if (!quizquestion) return;
 
     try {
-      const result = await dispatch(
+      await dispatch(
         submitQuiz({
           userId: user?._id as any,
           id: quizquestion._id as any,
           answers: selectedAnswers,
-          type: type ?? "",
+          type: type as "quiz" | "challenge",
         })
       ).unwrap(); // unwrap lets you catch errors
-
-      if (type === "challenge") {
-        await dispatch(
-          attemptChallenge({
-            userId: user?._id as any,
-            challengeId: quizquestion._id as any,
-            score: result.score, // use actual score from submission
-          })
-        );
-      }
 
       setQuizState("results");
       setShowCoinAnimation(true);
@@ -163,7 +152,7 @@ function QuizPage() {
     return (
       <QuizResults
         quiz={quizquestion}
-        submission={submission}
+        submission={submission as any}
         showCoinAnimation={showCoinAnimation}
         setShowCoinAnimation={setShowCoinAnimation}
         // restartQuiz={restartQuiz}

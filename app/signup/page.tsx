@@ -21,6 +21,7 @@ import {
   Eye,
   EyeOff,
   Check,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -30,6 +31,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { registerUser } from "@/redux/features/authSlice";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 // import { useToast } from "@/components/ui/use-toast";
 
 const SignupSchema = Yup.object().shape({
@@ -43,12 +52,25 @@ const SignupSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm password is required"),
   terms: Yup.boolean().oneOf([true], "You must accept the terms"),
+  exams: Yup.array().min(1, "Select at least one exam"),
+  subjects: Yup.array().min(1, "Select at least one subject"),
 });
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
+
+  const examOptions = ["WAEC", "JAMB", "NECO", "POST-UTME"];
+  const subjectOptions = [
+    "Mathematics",
+    "English",
+    "Biology",
+    "Literature",
+    "Agriculture",
+    "Chemistry",
+    "Physics",
+  ];
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -144,7 +166,7 @@ export default function SignUpPage() {
 
             <CardContent className="space-y-6">
               {/* Google Sign Up */}
-              <Button
+              {/* <Button
                 variant="outline"
                 className="w-full h-12 rounded-xl border-2 hover:bg-gray-50 bg-transparent"
               >
@@ -178,10 +200,10 @@ export default function SignUpPage() {
                     Or sign up with
                   </span>
                 </div>
-              </div>
+              </div> */}
 
               {/* Email/Phone Toggle */}
-              <div className="flex bg-gray-100 rounded-xl p-1">
+              {/* <div className="flex bg-gray-100 rounded-xl p-1">
                 <Button
                   variant="ghost"
                   className="flex-1 h-10 bg-white shadow-sm rounded-lg"
@@ -193,124 +215,7 @@ export default function SignUpPage() {
                   <Phone className="w-4 h-4 mr-2" />
                   Phone
                 </Button>
-              </div>
-
-              {/* Form Fields */}
-              {/* <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
-                      First Name
-                    </Label>
-                    <Input
-                      id="firstName"
-                      type="text"
-                      placeholder="John"
-                      className="h-12 rounded-xl border-2 focus:border-blue-500"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
-                      Last Name
-                    </Label>
-                    <Input
-                      id="lastName"
-                      type="text"
-                      placeholder="Doe"
-                      className="h-12 rounded-xl border-2 focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Email Address
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="john@example.com"
-                    className="h-12 rounded-xl border-2 focus:border-blue-500"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                    Password
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Create a strong password"
-                      className="h-12 rounded-xl border-2 focus:border-blue-500 pr-12"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-4 h-4 text-gray-500" />
-                      ) : (
-                        <Eye className="w-4 h-4 text-gray-500" />
-                      )}
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                    Confirm Password
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Confirm your password"
-                      className="h-12 rounded-xl border-2 focus:border-blue-500 pr-12"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    >
-                      {showConfirmPassword ? (
-                        <EyeOff className="w-4 h-4 text-gray-500" />
-                      ) : (
-                        <Eye className="w-4 h-4 text-gray-500" />
-                      )}
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-2">
-                  <input
-                    id="terms"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
-                  />
-                  <Label htmlFor="terms" className="text-sm text-gray-600 leading-relaxed">
-                    I agree to the{" "}
-                    <Link href="/terms" className="text-blue-600 hover:text-blue-700">
-                      Terms of Service
-                    </Link>{" "}
-                    and{" "}
-                    <Link href="/privacy" className="text-blue-600 hover:text-blue-700">
-                      Privacy Policy
-                    </Link>
-                  </Label>
-                </div>
               </div> */}
-
-              {/* Sign Up Button */}
-              {/* <Button className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-xl text-base font-medium">
-                Create Account
-              </Button> */}
 
               <Formik
                 initialValues={{
@@ -320,6 +225,8 @@ export default function SignUpPage() {
                   password: "",
                   confirmPassword: "",
                   terms: false,
+                  exams: [] as string[],
+                  subjects: [] as string[],
                 }}
                 validationSchema={SignupSchema}
                 onSubmit={async (values, { setSubmitting }) => {
@@ -331,6 +238,8 @@ export default function SignUpPage() {
                         email: values.email,
                         password: values.password,
                         username: values.email.split("@")[0],
+                        exams: values.exams,
+                        subjects: values.subjects,
                       })
                     ).unwrap(); // 👈 auto throws error if rejected
 
@@ -399,6 +308,128 @@ export default function SignUpPage() {
                       />
                       <ErrorMessage
                         name="email"
+                        component="p"
+                        className="text-red-500 text-sm"
+                      />
+                    </div>
+
+                    {/* Exams Selection */}
+                    <div className="space-y-2">
+                      <Label>Select Exams</Label>
+                      <Field name="exams">
+                        {({ field, form }: any) => (
+                          <div>
+                            <Select
+                              onValueChange={(val) =>
+                                !field.value.includes(val) &&
+                                form.setFieldValue("exams", [
+                                  ...field.value,
+                                  val,
+                                ])
+                              }
+                            >
+                              <SelectTrigger className="w-full h-12 rounded-xl border-2">
+                                <SelectValue placeholder="Choose exam(s)" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {examOptions.map((exam) => (
+                                  <SelectItem key={exam} value={exam}>
+                                    {exam}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+
+                            {/* Display selected exams as badges */}
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {field.value.map((exam: string, idx: number) => (
+                                <Badge
+                                  key={idx}
+                                  variant="secondary"
+                                  className="flex items-center gap-1"
+                                >
+                                  {exam}
+                                  <X
+                                    className="w-3 h-3 cursor-pointer"
+                                    onClick={() =>
+                                      form.setFieldValue(
+                                        "exams",
+                                        field.value.filter(
+                                          (e: string) => e !== exam
+                                        )
+                                      )
+                                    }
+                                  />
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </Field>
+                      <ErrorMessage
+                        name="exams"
+                        component="p"
+                        className="text-red-500 text-sm"
+                      />
+                    </div>
+
+                    {/* Subjects Selection */}
+                    <div className="space-y-2">
+                      <Label>Select Subjects</Label>
+                      <Field name="subjects">
+                        {({ field, form }: any) => (
+                          <div>
+                            <Select
+                              onValueChange={(val) =>
+                                !field.value.includes(val) &&
+                                form.setFieldValue("subjects", [
+                                  ...field.value,
+                                  val,
+                                ])
+                              }
+                            >
+                              <SelectTrigger className="w-full h-12 rounded-xl border-2">
+                                <SelectValue placeholder="Choose subject(s)" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {subjectOptions.map((subject) => (
+                                  <SelectItem key={subject} value={subject}>
+                                    {subject}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+
+                            {/* Display selected subjects as badges */}
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {field.value.map(
+                                (subject: string, idx: number) => (
+                                  <Badge
+                                    key={idx}
+                                    variant="secondary"
+                                    className="flex items-center gap-1"
+                                  >
+                                    {subject}
+                                    <X
+                                      className="w-3 h-3 cursor-pointer"
+                                      onClick={() =>
+                                        form.setFieldValue(
+                                          "subjects",
+                                          field.value.filter(
+                                            (s: string) => s !== subject
+                                          )
+                                        )
+                                      }
+                                    />
+                                  </Badge>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </Field>
+                      <ErrorMessage
+                        name="subjects"
                         component="p"
                         className="text-red-500 text-sm"
                       />

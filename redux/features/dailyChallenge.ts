@@ -21,6 +21,7 @@ export interface ChallengeAttempt {
 
 export interface DailyChallenge {
   _id?: string;
+  type: string;
   title: string;
   subject: string;
   exam: string;
@@ -151,53 +152,6 @@ export const deleteChallenge = createAsyncThunk(
   }
 );
 
-export const attemptChallenge = createAsyncThunk(
-  "dailyChallenge/attemptChallenge",
-  async (
-    {
-      userId,
-      challengeId,
-      score,
-    }: { userId: string; challengeId: string; score: number },
-    { rejectWithValue }
-  ) => {
-    try {
-      const { data } = await axiosInstance.post(
-        `/daily-challenges/${challengeId}/attempt`,
-        {
-          userId,
-          challengeId,
-          score,
-        }
-      );
-      return data;
-    } catch (err: any) {
-      return rejectWithValue(
-        err.response?.data?.message || "Error submitting attempt"
-      );
-    }
-  }
-);
-
-export const checkAttempt = createAsyncThunk(
-  "dailyChallenge/checkAttempt",
-  async (
-    { userId, challengeId }: { userId: string; challengeId: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      const { data } = await axiosInstance.get(
-        `/daily-challenges/${challengeId}/check`
-      );
-      return { challengeId, attempted: data.attempted };
-    } catch (err: any) {
-      return rejectWithValue(
-        err.response?.data?.message || "Error checking attempt"
-      );
-    }
-  }
-);
-
 // ===== Slice =====
 const dailyChallengeSlice = createSlice({
   name: "dailyChallenge",
@@ -244,9 +198,9 @@ const dailyChallengeSlice = createSlice({
       )
       .addCase(
         fetchChallenges.rejected,
-        (state: DailyChallengeState, action) => {
+        (state: DailyChallengeState, action: any) => {
           state.loading = false;
-          state.error = action.payload as string;
+          state.error = action.payload?.message;
         }
       )
 
@@ -290,34 +244,7 @@ const dailyChallengeSlice = createSlice({
             (ch) => ch._id !== action.payload
           );
         }
-      )
-      .addCase(attemptChallenge.fulfilled, (state: any, action) => {
-        state.loading = false;
-        const attempt: ChallengeAttempt = action.payload;
-        state.attempts[attempt.challengeId] = attempt;
-      })
-      .addCase(attemptChallenge.rejected, (state: any, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-      // Check Attempt
-      // .addCase(checkAttempt.fulfilled, (state: any, action) => {
-      //   state.loading = false;
-      //   const { challengeId, attempt } = action.payload;
-      //   state.attempts[challengeId] = attempt; // null if no attempt yet
-      // })
-
-      .addCase(checkAttempt.fulfilled, (state: any, action) => {
-        state.loading = false;
-        const { challengeId, attempted } = action.payload;
-        state.attempts[challengeId] = attempted; // 👈 store true/false directly
-      })
-
-      .addCase(checkAttempt.rejected, (state: any, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
+      );
   },
 });
 

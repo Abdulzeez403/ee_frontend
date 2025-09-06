@@ -117,7 +117,11 @@ export const deleteQuiz = createAsyncThunk(
 const quizSlice = createSlice({
   name: "quiz",
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Create Quiz
@@ -169,5 +173,7 @@ const quizSlice = createSlice({
       });
   },
 });
+
+export const { clearError } = quizSlice.actions;
 
 export default quizSlice.reducer;

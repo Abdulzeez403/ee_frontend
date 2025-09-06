@@ -69,6 +69,8 @@ export const registerUser = createAsyncThunk(
       password: string;
       firstName?: string;
       lastName?: string;
+      exams?: string[];
+      subjects?: string[];
     },
     { rejectWithValue }
   ) => {
@@ -76,10 +78,9 @@ export const registerUser = createAsyncThunk(
       const { data } = await axiosInstance.post("/auth/register", payload);
       return data;
     } catch (err: any) {
-      if (err.response && err.response.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message: err.message });
+      return rejectWithValue(
+        err.response?.data?.message || err.message || "Failed to fetch profile"
+      );
     }
   }
 );
@@ -155,6 +156,10 @@ const authSlice = createSlice({
       state.tokens = { accessToken: "" };
       localStorage.removeItem("tokens");
     },
+
+    clearError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -167,7 +172,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action: any) => {
         state.loading = false;
-        state.error = action.payload?.message;
+        state.error = action.payload;
       })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -186,9 +191,9 @@ const authSlice = createSlice({
           );
         }
       })
-      .addCase(loginUser.rejected, (state, action: any) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload as any;
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.user = action.payload;
@@ -204,10 +209,10 @@ const authSlice = createSlice({
       })
       .addCase(completeChallenge.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload as any;
       });
   },
 });
 
-export const { logout, setTokens, loadTokens } = authSlice.actions;
+export const { logout, setTokens, loadTokens, clearError } = authSlice.actions;
 export default authSlice.reducer;

@@ -5,6 +5,7 @@ import { ReduxProvider } from "./redux_provider";
 import { Toaster } from "@/components/ui/toaster";
 import { loadTokens } from "@/redux/features/authSlice";
 import { store } from "@/redux/store";
+import ErrorListener from "./errorListener";
 store.dispatch(loadTokens());
 
 const poppins = Poppins({
@@ -35,6 +36,7 @@ export default function RootLayout({
         <body className="font-sans">
           {children}
           <Toaster />
+          <ErrorListener />
         </body>
       </ReduxProvider>
     </html>
