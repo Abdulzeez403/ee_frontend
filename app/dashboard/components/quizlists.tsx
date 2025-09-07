@@ -47,16 +47,17 @@ export default function QuizLists({
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-heading font-bold text-2xl text-gray-900">
-          Recommended  Quizzes
+          Recommended Quizzes
         </h2>
 
         <div className="flex gap-4 items-center ">
-          <Link
-            href="/subjects"
+          {/* <Link
+            href="/jamb
+            "
             className="text-white p-2 rounded-sm bg-gradient-to-br from-yellow-400 to-orange-400 font-medium"
           >
             Customized Exam
-          </Link>
+          </Link> */}
 
           <Link
             href="/subjects"

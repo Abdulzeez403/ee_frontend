@@ -19,6 +19,8 @@ import {
   ChevronRight,
   Calendar,
   Award,
+  GraduationCap,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +32,7 @@ import StreakCalendar from "./components/calender";
 import QuizLists from "./components/quizlists";
 import { checkAttempt } from "@/redux/features/businessLogic";
 import { fetchQuizzes } from "@/redux/features/quizSlice";
+import PastQuestionSection from "./components/pastQuestionSection";
 
 const rankNames: Record<number, string> = {
   1: "🐣 Rookie Egg",
@@ -224,6 +227,11 @@ export default function DashboardPage() {
                 </Link>
               </div>
             </Card>
+
+            {/* Practice Past Questions */}
+            <div>
+              <PastQuestionSection />
+            </div>
 
             {/* Recommended Subjects */}
             <div>

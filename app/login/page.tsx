@@ -19,7 +19,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import * as Yup from "yup";
 
 import { useToast } from "@/components/ui/use-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser, setTokens } from "@/redux/features/authSlice";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +32,8 @@ const LoginSchema = Yup.object().shape({
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const { error, loading } = useSelector((state: RootState) => state.auth);
+  console.log(error, "the error");
   const dispatch = useDispatch<AppDispatch>();
   const { toast } = useToast();
   const router = useRouter();
@@ -122,7 +124,7 @@ export default function LoginPage() {
                   } catch (err: any) {
                     toast({
                       title: "Login failed",
-                      description: err?.message || "Invalid email or password",
+                      description: error || "Invalid email or password",
                       variant: "destructive",
                     });
                   } finally {

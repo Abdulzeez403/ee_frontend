@@ -39,8 +39,9 @@ function QuizPage() {
     if (!id || !type) return;
     if (type === "quiz") {
       dispatch(fetchQuiz(id));
-    } else {
+    } else if (type === "challenge") {
       dispatch(fetchChallenge(id));
+    } else {
     }
   }, [dispatch, id, type]);
 
