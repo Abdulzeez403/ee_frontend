@@ -82,7 +82,7 @@ export default function DashboardPage() {
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
               <span className="font-heading font-bold text-xl text-gray-900">
-                Eduwa
+                PassRite
               </span>
             </div>
 

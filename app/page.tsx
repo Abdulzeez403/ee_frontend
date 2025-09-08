@@ -35,7 +35,7 @@ export default function LandingPage() {
               <BookOpen className="w-5 h-5 text-white" />
             </div>
             <span className="font-heading font-bold text-xl text-gray-900">
-              EduwaExam
+              PassRite
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
