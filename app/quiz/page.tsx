@@ -1,29 +1,43 @@
 "use client";
+
 import { useState, useEffect, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
+import { useSearchParams } from "next/navigation";
+
+// slices
 import { fetchQuiz } from "@/redux/features/quizSlice";
-import { submitQuiz } from "@/redux/features/businessLogic";
 import { fetchChallenge } from "@/redux/features/dailyChallenge";
+import { fetchPastQuestions } from "@/redux/features/pastQuestionSlice";
+import { submitQuiz } from "@/redux/features/businessLogic";
+
+// components
 import QuizHeader from "./components/quizHeader";
 import QuizActive from "./components/quizActive";
 import QuizResults from "./components/quizResult";
 import QuizStart from "./components/quizStart";
-import { useSearchParams } from "next/navigation";
 
 function QuizPage() {
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  const type = searchParams.get("type");
+  const id = searchParams.get("id"); // e.g. "mathematics-2023"
+  const type = searchParams.get("type"); // "quiz" | "challenge" | "past-question"
 
   const dispatch = useDispatch<AppDispatch>();
+
+  // redux state
   const { quiz, loading, error } = useSelector(
     (state: RootState) => state.quiz
   );
-  const { submission } = useSelector((state: RootState) => state.businessLogic);
   const { active } = useSelector((state: RootState) => state.dailyChallenges);
+  const { submission } = useSelector((state: RootState) => state.businessLogic);
   const { user } = useSelector((state: RootState) => state.auth);
+  const {
+    questions: pastQuestions,
+    loading: pastLoading,
+    error: pastError,
+  } = useSelector((state: RootState) => state.pastQestion);
 
+  // local state
   const [quizState, setQuizState] = useState<"start" | "active" | "results">(
     "start"
   );
@@ -32,25 +46,41 @@ function QuizPage() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
 
-  // 👇 use correct quiz source
-  const quizquestion = type === "quiz" ? quiz : active;
+  // decide quiz source (normalize to always have .questions + .timeLimit)
+  let quizquestion: any = null;
+  if (type === "quiz") {
+    quizquestion = quiz;
+  } else if (type === "challenge") {
+    quizquestion = active;
+  } else if (type === "past-question") {
+    quizquestion =
+      pastQuestions && pastQuestions.length > 0
+        ? { questions: pastQuestions, timeLimit: 40 * 60 } // 40 min default
+        : null;
+  }
 
+  // fetch data
   useEffect(() => {
     if (!id || !type) return;
+
     if (type === "quiz") {
       dispatch(fetchQuiz(id));
     } else if (type === "challenge") {
       dispatch(fetchChallenge(id));
-    } else {
+    } else if (type === "past-question") {
+      const [subject, year] = id.split("-");
+      dispatch(fetchPastQuestions({ subject, year: Number(year) }));
     }
   }, [dispatch, id, type]);
 
+  // set timer when quiz loads
   useEffect(() => {
-    if (quizquestion) {
+    if (quizquestion?.timeLimit) {
       setTimeLeft(quizquestion.timeLimit);
     }
   }, [quizquestion]);
 
+  // countdown
   useEffect(() => {
     if (quizState === "active" && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft((prev) => prev - 1), 1000);
@@ -60,6 +90,7 @@ function QuizPage() {
     }
   }, [timeLeft, quizState]);
 
+  // helpers
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -70,7 +101,7 @@ function QuizPage() {
     setQuizState("active");
     setCurrentQuestion(0);
     setSelectedAnswers([]);
-    if (quizquestion) setTimeLeft(quizquestion.timeLimit);
+    if (quizquestion?.timeLimit) setTimeLeft(quizquestion.timeLimit);
   };
 
   const selectAnswer = (answerIndex: number) => {
@@ -87,8 +118,39 @@ function QuizPage() {
     }
   };
 
+  // const handleQuizComplete = async () => {
+  //   if (!quizquestion) return;
+
+  //   try {
+  //     await dispatch(
+  //       submitQuiz({
+  //         userId: user?._id as any,
+  //         id: quizquestion._id as any, // might not exist for past-question
+  //         answers: selectedAnswers,
+  //         type: type as "quiz" | "challenge" | "past-question",
+  //       })
+  //     ).unwrap();
+
+  //     setQuizState("results");
+  //     setShowCoinAnimation(true);
+  //   } catch (err) {
+  //     console.error("Error submitting quiz:", err);
+  //   }
+  // };
+
   const handleQuizComplete = async () => {
     if (!quizquestion) return;
+
+    if (type === "past-question") {
+      const score = calculatePastQuestionScore(
+        quizquestion.questions,
+        selectedAnswers
+      );
+      console.log("Past Question Score:", score);
+      setQuizState("results");
+      setShowCoinAnimation(true);
+      return;
+    }
 
     try {
       await dispatch(
@@ -96,14 +158,14 @@ function QuizPage() {
           userId: user?._id as any,
           id: quizquestion._id as any,
           answers: selectedAnswers,
-          type: type as "quiz" | "challenge",
+          type: type as "quiz" | "challenge" | "past-question",
         })
-      ).unwrap(); // unwrap lets you catch errors
+      ).unwrap();
 
       setQuizState("results");
       setShowCoinAnimation(true);
     } catch (err) {
-      console.error("Error submitting challenge:", err);
+      console.error("Error submitting quiz:", err);
     }
   };
 
@@ -111,15 +173,40 @@ function QuizPage() {
     setQuizState("start");
     setCurrentQuestion(0);
     setSelectedAnswers([]);
-    if (quizquestion) setTimeLeft(quizquestion.timeLimit);
+    if (quizquestion?.timeLimit) setTimeLeft(quizquestion.timeLimit);
   };
 
-  if (loading) return <p className="p-10 text-center">Loading quiz...</p>;
-  if (error)
-    return <p className="p-10 text-center text-red-500">Error: {error}</p>;
-  if (!quizquestion)
+  // helpers
+  const calculatePastQuestionScore = (questions: any[], answers: number[]) => {
+    let correct = 0;
+
+    questions.forEach((q, i) => {
+      const correctIndex = ["a", "b", "c", "d"].indexOf(q.answer.toLowerCase());
+      if (answers[i] === correctIndex) {
+        correct++;
+      }
+    });
+
+    return {
+      correct,
+      total: questions.length,
+      percentage: Math.round((correct / questions.length) * 100),
+    };
+  };
+
+  // loading & errors
+  if (loading || pastLoading)
+    return <p className="p-10 text-center">Loading quiz...</p>;
+  if (error || pastError)
+    return (
+      <p className="p-10 text-center text-red-500">
+        Error: {error || pastError}
+      </p>
+    );
+  if (!quizquestion || !quizquestion.questions?.length)
     return <p className="p-10 text-center">No quiz available</p>;
 
+  // states
   if (quizState === "start") {
     return (
       <QuizStart
@@ -142,26 +229,29 @@ function QuizPage() {
           selectAnswer={selectAnswer}
           nextQuestion={nextQuestion}
           handleQuizComplete={handleQuizComplete}
-          // timeLeft={timeLeft}
-          // formatTime={formatTime}
         />
       </div>
     );
   }
 
   if (quizState === "results") {
+    const pastScore =
+      type === "past-question"
+        ? calculatePastQuestionScore(quizquestion.questions, selectedAnswers)
+        : null;
+
     return (
       <QuizResults
         quiz={quizquestion}
-        submission={submission as any}
+        submission={type !== "past-question" ? (submission as any) : null}
+        pastScore={pastScore} // ✅ pass it down
         showCoinAnimation={showCoinAnimation}
         setShowCoinAnimation={setShowCoinAnimation}
-        // restartQuiz={restartQuiz}
       />
     );
   }
 
-  return <p className="p-10 text-center">No state matched</p>; // ✅ fallback
+  return <p className="p-10 text-center">No state matched</p>;
 }
 
 export default function MainQuizPage() {

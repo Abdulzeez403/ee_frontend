@@ -129,37 +129,6 @@ export default function PastQuestionsPage() {
 
   const currentExam = examConfig[examType];
 
-  useEffect(() => {
-    const loadSubjectsData = async () => {
-      setIsLoading(true);
-      try {
-        // Try to fetch sample data to get available subjects
-        const sampleData = await currentExam.fetchFunction(
-          "mathematics",
-          "2023"
-        );
-        if (sampleData && sampleData.questions.length > 0) {
-          // Update subjects with real question counts if API is available
-          const updatedSubjects = defaultSubjects.map((subject) => ({
-            ...subject,
-            questions: sampleData.questions.length || 40,
-          }));
-          setSubjects(updatedSubjects);
-          setTotalQuestions(updatedSubjects.length * 40);
-        }
-      } catch (error) {
-        console.log(
-          "[v0] Using default subjects data due to API unavailability"
-        );
-        // Keep default subjects if API is not available
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadSubjectsData();
-  }, [examType, currentExam.fetchFunction]);
-
   const getColorClasses = (color: string) => {
     const colors = {
       green: {
@@ -358,9 +327,10 @@ export default function PastQuestionsPage() {
                     canStartPractice
                       ? `/quiz?id=${selectedSubject
                           .toLowerCase()
-                          .replace(/\s+/g, "-")}-${selectedYear}&type=${
-                          currentExam.apiType
-                        }&exam=${examType}`
+                          .replace(
+                            /\s+/g,
+                            "-"
+                          )}-${selectedYear}&type=past-question&exam=${examType}`
                       : "#"
                   }
                   className={canStartPractice ? "" : "pointer-events-none"}

@@ -8,7 +8,7 @@ interface Submission {
 
 interface Attempt {
   id: string;
-  type: "quiz" | "challenge";
+  type: "quiz" | "challenge" | "past-question";
   attempted: boolean;
 }
 
@@ -40,7 +40,7 @@ export const submitQuiz = createAsyncThunk(
     id: string;
     userId: string;
     answers: number[];
-    type: "quiz" | "challenge";
+    type: "quiz" | "challenge" | "past-question";
   }) => {
     const res = await axiosInstance.post(`/logic/${userId}/submit-quiz`, {
       id,
@@ -59,7 +59,11 @@ export const checkAttempt = createAsyncThunk(
       userId,
       referenceId,
       type,
-    }: { userId: string; referenceId: string; type: "quiz" | "challenge" },
+    }: {
+      userId: string;
+      referenceId: string;
+      type: "quiz" | "challenge" | "past-question";
+    },
     { rejectWithValue }
   ) => {
     try {

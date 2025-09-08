@@ -3,16 +3,26 @@
 import BubbleBlast from "@/components/bubbleBlast";
 import { CoinAnimation } from "@/components/coin-animation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { CheckCircle, Coins } from "lucide-react";
+import { CheckCircle, Coins, History } from "lucide-react";
 import React from "react";
 
 interface QuizResultsProps {
   quiz: {
-    questions: { question: string; options: string[]; correctAnswer: number }[];
+    questions: {
+      question: string;
+      options: string[];
+      correctAnswer?: number;
+      answer?: string;
+    }[];
   };
   submission: {
     score: number;
     reward: number;
+  } | null;
+  pastScore?: {
+    correct: number;
+    total: number;
+    percentage: number;
   } | null;
   showCoinAnimation: boolean;
   setShowCoinAnimation: (value: boolean) => void;
@@ -21,20 +31,29 @@ interface QuizResultsProps {
 export default function QuizResults({
   quiz,
   submission,
+  pastScore,
   showCoinAnimation,
   setShowCoinAnimation,
 }: QuizResultsProps) {
+  // ✅ Determine which score to show
   const percentage = submission
     ? Math.round((submission.score / quiz.questions.length) * 100)
+    : pastScore
+    ? pastScore.percentage
     : 0;
+
+  const correct = submission ? submission.score : pastScore?.correct ?? 0;
+  const total = quiz.questions.length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50 flex items-center justify-center p-4">
+      {/* Background Confetti */}
       <BubbleBlast
         trigger={showCoinAnimation}
         onComplete={() => setShowCoinAnimation(false)}
       />
 
+      {/* Coin Animation */}
       {showCoinAnimation && submission && (
         <CoinAnimation
           amount={submission.reward}
@@ -56,14 +75,16 @@ export default function QuizResults({
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {/* Score Display */}
+          {/* Main Score Display */}
           <div className="text-center bg-gradient-to-r from-blue-600 to-green-500 rounded-2xl p-8 text-white">
             <h3 className="font-heading font-bold text-4xl mb-2">
               {percentage}%
             </h3>
             <p className="text-blue-100 mb-4">
-              You got {submission?.score} out of {quiz.questions.length} correct
+              You got {correct} out of {total} correct
             </p>
+
+            {/* Only show reward for backend quizzes/challenges */}
             {submission && (
               <div className="flex items-center justify-center gap-2 bg-white/20 rounded-full px-4 py-2 inline-flex">
                 <Coins className="w-5 h-5" />
@@ -73,6 +94,20 @@ export default function QuizResults({
               </div>
             )}
           </div>
+
+          {/* Past Attempt (comparison) */}
+          {pastScore && (
+            <div className="text-center bg-gray-100 rounded-xl p-6">
+              <div className="flex items-center justify-center gap-2 mb-2 text-gray-700">
+                <History className="w-5 h-5" />
+                <span className="font-semibold">Previous Attempt</span>
+              </div>
+              <p className="text-lg text-gray-600">
+                {pastScore.percentage}% ({pastScore.correct} / {pastScore.total}
+                )
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

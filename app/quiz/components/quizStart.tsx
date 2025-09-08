@@ -47,7 +47,7 @@ export default function QuizStart({
             <div className="text-center p-4 bg-blue-50 rounded-xl">
               <Target className="w-8 h-8 text-blue-600 mx-auto mb-2" />
               <p className="font-semibold text-blue-700">
-                {quiz.questions.length} Questions
+                {quiz?.questions?.length} Questions
               </p>
             </div>
             <div className="text-center p-4 bg-yellow-50 rounded-xl">
