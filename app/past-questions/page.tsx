@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -116,7 +116,7 @@ const defaultSubjects = [
   { name: "Government", icon: "🏛️", questions: 40 },
 ];
 
-export default function PastQuestionsPage() {
+function PastQuestionsPage() {
   const searchParams = useSearchParams();
   const examType =
     (searchParams.get("exam") as keyof typeof examConfig) || "jamb";
@@ -463,5 +463,13 @@ export default function PastQuestionsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function MainPastQuestionPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PastQuestionsPage />
+    </Suspense>
   );
 }

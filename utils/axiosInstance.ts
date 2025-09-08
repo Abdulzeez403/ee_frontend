@@ -2,7 +2,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = `${process.env.NEXT_PUBLIC_AUTH}/api`;
+
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
