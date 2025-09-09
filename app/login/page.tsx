@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { BookOpen, Coins, Gift, Mail, Phone, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -33,7 +32,6 @@ const LoginSchema = Yup.object().shape({
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { error, loading } = useSelector((state: RootState) => state.auth);
-  console.log(error, "the error");
   const dispatch = useDispatch<AppDispatch>();
   const { toast } = useToast();
   const router = useRouter();
@@ -124,8 +122,9 @@ export default function LoginPage() {
                   } catch (err: any) {
                     toast({
                       title: "Login failed",
-                      description: error || "Invalid email or password",
-                      variant: "destructive",
+                      description:
+                        error?.toString() || "Invalid email or password!",
+                      variant: "default",
                     });
                   } finally {
                     setSubmitting(false);

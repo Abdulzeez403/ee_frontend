@@ -16,6 +16,7 @@ import QuizHeader from "./components/quizHeader";
 import QuizActive from "./components/quizActive";
 import QuizResults from "./components/quizResult";
 import QuizStart from "./components/quizStart";
+import { useToast } from "@/hooks/use-toast";
 
 function QuizPage() {
   const searchParams = useSearchParams();
@@ -45,6 +46,7 @@ function QuizPage() {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
+  const { toast } = useToast();
 
   // decide quiz source (normalize to always have .questions + .timeLimit)
   let quizquestion: any = null;
@@ -164,8 +166,12 @@ function QuizPage() {
 
       setQuizState("results");
       setShowCoinAnimation(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error submitting quiz:", err);
+      toast({
+        title: "Error",
+        description: error || " You have already attmept the quiz!",
+      });
     }
   };
 

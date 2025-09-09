@@ -79,7 +79,7 @@ export const registerUser = createAsyncThunk(
       return data;
     } catch (err: any) {
       return rejectWithValue(
-        err.response?.data?.message || err.message || "Failed to fetch profile"
+        err.response?.data?.message || "Registration Failed!"
       );
     }
   }
@@ -106,27 +106,6 @@ export const fetchProfile = createAsyncThunk(
     } catch (err: any) {
       return rejectWithValue(
         err.response?.data?.message || "Failed to fetch profile"
-      );
-    }
-  }
-);
-
-// ✅ Complete challenge
-export const completeChallenge = createAsyncThunk(
-  "user/completeChallenge",
-  async (
-    { challengeId, score }: { challengeId: string; score: number },
-    { rejectWithValue }
-  ) => {
-    try {
-      const { data } = await axiosInstance.post("/daily-challenges/complete", {
-        challengeId,
-        score,
-      });
-      return data;
-    } catch (err: any) {
-      return rejectWithValue(
-        err.response?.data?.message || "Failed to complete challenge"
       );
     }
   }
@@ -197,19 +176,6 @@ const authSlice = createSlice({
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.user = action.payload;
-      })
-      .addCase(completeChallenge.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(completeChallenge.fulfilled, (state, action) => {
-        state.loading = false;
-        state.streak = action.payload.streak;
-        state.totalScore = action.payload.totalScore;
-        state.experience = action.payload.experience;
-      })
-      .addCase(completeChallenge.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as any;
       });
   },
 });
