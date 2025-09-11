@@ -46,7 +46,7 @@ export default function QuizLists({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-heading font-bold text-2xl text-gray-900">
+        <h2 className="font-heading font-bold text-lg md:text2x1 lg:text-2x1 text-gray-900">
           Recommended Quizzes
         </h2>
 

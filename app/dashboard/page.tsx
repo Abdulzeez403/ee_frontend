@@ -75,7 +75,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
@@ -96,31 +96,34 @@ export default function DashboardPage() {
               </div>
 
               {/* User Avatar */}
-              <Avatar className="w-10 h-10">
-                <AvatarImage src="/placeholder.svg?height=40&width=40" />
-                <AvatarFallback className="bg-blue-600 text-white font-semibold">
-                  JD
-                </AvatarFallback>
-              </Avatar>
+              <Link href="/profile">
+                <Avatar className="w-10 h-10 cursor-pointer">
+                  <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                  <AvatarFallback className="bg-blue-600 text-white font-semibold">
+                    {user?.firstName.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto p-4">
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="font-heading font-bold text-3xl text-gray-900 mb-2">
             Welcome back, {user?.firstName} 👋
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-md text-gray-600 md:text-lg lg:text-lg">
             Ready to continue your learning journey and earn more coins?
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        {/* <div className="grid lg:grid-cols-3 gap-8"> */}
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className=" space-y-8">
             {/* Stats Cards */}
             <div className="grid md:grid-cols-3 gap-6">
               {/* Streak Counter */}
@@ -179,50 +182,55 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            {/* Daily Challenge */}
             <Card className="border-0 shadow-xl rounded-3xl overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-green-500 p-6 text-white">
-                <div className="flex items-center justify-between">
+              <div className="bg-gradient-to-r from-blue-600 to-green-500 p-4 sm:p-6 text-white">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  {/* Left Section */}
                   <div>
-                    <h2 className="font-heading font-bold text-2xl mb-2">
+                    <h2 className="font-heading font-bold text-xl sm:text-2xl lg:text-3xl mb-2">
                       Daily Quiz Challenge
                     </h2>
-                    <p className="text-blue-100 mb-4">
+                    <p className="text-sm sm:text-base md:text-lg text-blue-100 mb-3">
                       Complete today's challenge and earn bonus coins!
                     </p>
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Target className="w-5 h-5" />
+
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4">
+                      <div className="flex items-center gap-2 text-sm sm:text-base">
+                        <Target className="w-4 h-4 sm:w-5 sm:h-5" />
                         <span>{active?.questions.length} Questions</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-5 h-5" />
+                      <div className="flex items-center gap-2 text-sm sm:text-base">
+                        <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
                         <span>{active?.timeLimit} Minutes</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Coins className="w-5 h-5" />
+                      <div className="flex items-center gap-2 text-sm sm:text-base">
+                        <Coins className="w-4 h-4 sm:w-5 sm:h-5" />
                         <span>+20 Coins</span>
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-4">
-                      <Zap className="w-10 h-10 text-white" />
+
+                  {/* Right Section */}
+                  <div className="flex flex-col items-center sm:items-end text-center sm:text-right">
+                    <div className="hidden w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center mb-3">
+                      <Zap className=" w-8 h-8 sm:w-10 sm:h-10 text-white" />
                     </div>
                   </div>
                 </div>
+
+                {/* Button */}
                 <Link
                   href={
                     attempt ? "#" : `/quiz?id=${active?._id}&type=challenge`
                   }
                 >
                   <Button
-                    disabled={attempt as any}
+                    disabled={!!attempt}
                     size="lg"
-                    className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 sm:px-8 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {attempt ? "Already Attempted" : "Start Challenge"}
-                    <ChevronRight className="ml-2 w-5 h-5" />
+                    <ChevronRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
                   </Button>
                 </Link>
               </div>

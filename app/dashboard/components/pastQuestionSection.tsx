@@ -53,11 +53,11 @@ const exams = [
 export default function PastQuestionSection() {
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-heading font-bold text-2xl text-gray-900">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <h2 className="font-heading font-bold text-xl sm:text-2xl text-gray-900 mb-2 sm:mb-0">
           Practice Past Questions
         </h2>
-        <span className="text-gray-500 text-sm">Choose your exam type</span>
+        {/* <span className="text-gray-500 text-sm">Choose your exam type</span> */}
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

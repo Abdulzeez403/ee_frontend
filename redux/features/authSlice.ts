@@ -25,6 +25,7 @@ export interface User {
   lastActivity: string | null;
   achievements: string[]; // or an Achievement[] if you want a full object type
   subjects: string[]; // could also be Subject[] if richer objects are stored
+  exams: string[];
 
   preferences: {
     notifications: boolean;
