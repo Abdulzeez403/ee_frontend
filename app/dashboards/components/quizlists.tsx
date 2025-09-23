@@ -99,7 +99,11 @@ export default function QuizLists({
               return (
                 <Link
                   key={quiz._id}
-                  href={attempted ? "#" : `/quiz?id=${quiz._id}&type=quiz`}
+                  href={
+                    attempted
+                      ? "#"
+                      : `/dashboards/quiz?id=${quiz._id}&type=quiz`
+                  }
                   className="block"
                 >
                   <Card

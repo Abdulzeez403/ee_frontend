@@ -70,12 +70,28 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  /* Updated AI tutor colors to vibrant, playful theme inspired by design images */
+  --ai-tutor-bg: linear-gradient(
+    135deg,
+    oklch(0.85 0.15 320) 0%,
+    oklch(0.75 0.2 240) 100%
+  );
+  --ai-tutor-card: oklch(0.98 0.02 320);
+  --ai-tutor-accent: oklch(0.7 0.25 280);
+  --ai-tutor-accent-foreground: oklch(0.98 0 0);
+  --ai-tutor-message-user: oklch(0.65 0.2 320);
+  --ai-tutor-message-ai: oklch(0.95 0.05 280);
+  --ai-tutor-primary: oklch(0.6 0.3 200);
+  --ai-tutor-secondary: oklch(0.7 0.25 160);
+  --ai-tutor-tertiary: oklch(0.65 0.3 40);
+  --ai-tutor-quaternary: oklch(0.75 0.2 320);
 }
 
 @theme inline {
   --font-sans: var(--font-nunito);
   --font-serif: var(--font-poppins);
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 
   /* ExamPrep+ Color Palette */
   --color-background: var(--background);
@@ -114,6 +130,17 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  /* Added AI tutor color tokens */
+  --color-ai-tutor-bg: var(--ai-tutor-bg);
+  --color-ai-tutor-card: var(--ai-tutor-card);
+  --color-ai-tutor-accent: var(--ai-tutor-accent);
+  --color-ai-tutor-accent-foreground: var(--ai-tutor-accent-foreground);
+  --color-ai-tutor-message-user: var(--ai-tutor-message-user);
+  --color-ai-tutor-message-ai: var(--ai-tutor-message-ai);
+  --color-ai-tutor-primary: var(--ai-tutor-primary);
+  --color-ai-tutor-secondary: var(--ai-tutor-secondary);
+  --color-ai-tutor-tertiary: var(--ai-tutor-tertiary);
+  --color-ai-tutor-quaternary: var(--ai-tutor-quaternary);
 }
 
 .font-heading {
@@ -127,4 +154,24 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Added gradient background utility for AI tutor */
+.ai-tutor-gradient {
+  background: linear-gradient(
+    135deg,
+    #f093fb 0%,
+    #f5576c 25%,
+    #4facfe 50%,
+    #00f2fe 100%
+  );
+}
+
+.ai-tutor-card-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  backdrop-filter: blur(10px);
 }

@@ -8,7 +8,7 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { purchaseAirtime } from "@/redux/features/reward";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
-import { NetworkProviders } from "@/app/constact/networProvider";
+import { NetworkProviders } from "@/app/constant/networProvider";
 import { CheckCircle } from "lucide-react";
 
 const predefinedAmounts = ["100", "200", "500", "1000"];

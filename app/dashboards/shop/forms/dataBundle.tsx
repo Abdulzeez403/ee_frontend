@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useToast } from "@/hooks/use-toast";
 import { purchaseData } from "@/redux/features/reward";
-import { NetworkProviders } from "@/app/constact/networProvider";
+import { NetworkProviders } from "@/app/constant/networProvider";
 import { Input } from "@/components/ui/input";
 
 const DataFormSchema = Yup.object().shape({

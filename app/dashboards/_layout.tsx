@@ -5,25 +5,12 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { loadTokens } from "@/redux/features/authSlice";
 import { store } from "@/redux/store";
-import { ReduxProvider } from "./redux_provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { DashboardNav } from "@/components/dashboard-nav";
+import { ReduxProvider } from "../redux_provider";
 
 store.dispatch(loadTokens());
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-poppins",
-  weight: ["400", "600", "700"],
-});
-
-const nunito = Nunito({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-nunito",
-  weight: ["300", "400", "500", "600"],
-});
 
 export default function RootLayout({
   children,
@@ -42,12 +29,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${nunito.variable} antialiased`}
+      // className={`${poppins.variable} ${nunito.variable} antialiased`}
     >
       <ReduxProvider>
         <body className="font-sans">
           {children}
           <Toaster />
+          <DashboardNav />
         </body>
       </ReduxProvider>
     </html>

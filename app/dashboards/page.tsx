@@ -21,6 +21,7 @@ import {
   Award,
   GraduationCap,
   FileText,
+  AirVent,
 } from "lucide-react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -213,7 +214,7 @@ export default function DashboardPage() {
 
                   {/* Right Section */}
                   <div className="flex flex-col items-center sm:items-end text-center sm:text-right">
-                    <div className="hidden w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center mb-3">
+                    <div className="hidden w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center mb-3 md:flex lg:flex">
                       <Zap className=" w-8 h-8 sm:w-10 sm:h-10 text-white" />
                     </div>
                   </div>
@@ -263,7 +264,16 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Link href="/shop">
+                <Link href="/dashboards/tutor">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start h-12 rounded-xl bg-transparent"
+                  >
+                    <AirVent className="w-5 h-5 mr-3 text-purple-600" />
+                    Personal Tutor
+                  </Button>
+                </Link>
+                <Link href="/dashboards/shop">
                   <Button
                     variant="outline"
                     className="w-full justify-start h-12 rounded-xl bg-transparent"
@@ -273,7 +283,7 @@ export default function DashboardPage() {
                   </Button>
                 </Link>
 
-                <Link href="/leaderboard">
+                <Link href="/dashboards/leaderboard">
                   <Button
                     variant="outline"
                     className="w-full justify-start h-12 rounded-xl bg-transparent"

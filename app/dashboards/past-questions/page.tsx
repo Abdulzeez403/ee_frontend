@@ -171,7 +171,7 @@ function PastQuestionsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/dashboard">
+              <Link href="/dashboards">
                 <Button variant="ghost" size="sm" className="gap-2">
                   <ArrowLeft className="w-4 h-4" />
                   Back to Dashboard
@@ -325,7 +325,7 @@ function PastQuestionsPage() {
                 <Link
                   href={
                     canStartPractice
-                      ? `/quiz?id=${selectedSubject
+                      ? `/dashboards/quiz?id=${selectedSubject
                           .toLowerCase()
                           .replace(
                             /\s+/g,
