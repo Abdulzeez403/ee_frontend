@@ -22,6 +22,7 @@ function QuizPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id"); // e.g. "mathematics-2023"
   const type = searchParams.get("type"); // "quiz" | "challenge" | "past-question"
+  const exam_type = searchParams.get("exam"); // e.g. "waec", "jamb", etc.
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -71,7 +72,13 @@ function QuizPage() {
       dispatch(fetchChallenge(id));
     } else if (type === "past-question") {
       const [subject, year] = id.split("-");
-      dispatch(fetchPastQuestions({ subject, year: Number(year) }));
+      dispatch(
+        fetchPastQuestions({
+          subject,
+          year: Number(year),
+          type: exam_type as any,
+        })
+      );
     }
   }, [dispatch, id, type]);
 
@@ -202,7 +209,17 @@ function QuizPage() {
 
   // loading & errors
   if (loading || pastLoading)
-    return <p className="p-10 text-center">Loading quiz...</p>;
+    return (
+      <div className="flex flex-col items-center justify-center p-10">
+        <div className="flex space-x-2">
+          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.2s]"></div>
+          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.4s]"></div>
+        </div>
+        <p className="mt-4 text-gray-600 font-medium">Loading quiz...</p>
+      </div>
+    );
+
   if (error || pastError)
     return (
       <p className="p-10 text-center text-red-500">

@@ -293,10 +293,10 @@ export default function SignUpPage() {
                             {/* Display selected exams as badges */}
                             <div className="flex flex-wrap gap-2 mt-2">
                               {field.value.map((exam: string, idx: number) => (
-                                <Badge
+                                <div
                                   key={idx}
-                                  variant="secondary"
-                                  className="flex items-center gap-1"
+                                  // variant="secondary"
+                                  className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm flex items-center gap-1"
                                 >
                                   {exam}
                                   <X
@@ -305,12 +305,12 @@ export default function SignUpPage() {
                                       form.setFieldValue(
                                         "exams",
                                         field.value.filter(
-                                          (e: string) => e !== exam
+                                          (_: string, i: number) => i !== idx
                                         )
                                       )
                                     }
                                   />
-                                </Badge>
+                                </div>
                               ))}
                             </div>
                           </div>
@@ -354,10 +354,9 @@ export default function SignUpPage() {
                             <div className="flex flex-wrap gap-2 mt-2">
                               {field.value.map(
                                 (subject: string, idx: number) => (
-                                  <Badge
+                                  <div
                                     key={idx}
-                                    variant="secondary"
-                                    className="flex items-center gap-1"
+                                    className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm flex items-center gap-1"
                                   >
                                     {subject}
                                     <X
@@ -366,12 +365,12 @@ export default function SignUpPage() {
                                         form.setFieldValue(
                                           "subjects",
                                           field.value.filter(
-                                            (s: string) => s !== subject
+                                            (_: string, i: number) => i !== idx
                                           )
                                         )
                                       }
                                     />
-                                  </Badge>
+                                  </div>
                                 )
                               )}
                             </div>
@@ -386,7 +385,8 @@ export default function SignUpPage() {
                     </div>
 
                     {/* Password */}
-                    <div className="space-y-2">
+                    {/* Password */}
+                    <div className="space-y-2 relative">
                       <Label htmlFor="password">Password</Label>
                       <Field
                         as={Input}
@@ -396,6 +396,17 @@ export default function SignUpPage() {
                         placeholder="Create a strong password"
                         className="h-12 rounded-xl border-2 pr-12"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
                       <ErrorMessage
                         name="password"
                         component="p"
@@ -404,7 +415,8 @@ export default function SignUpPage() {
                     </div>
 
                     {/* Confirm Password */}
-                    <div className="space-y-2">
+                    {/* Confirm Password */}
+                    <div className="space-y-2 relative">
                       <Label htmlFor="confirmPassword">Confirm Password</Label>
                       <Field
                         as={Input}
@@ -414,6 +426,19 @@ export default function SignUpPage() {
                         placeholder="Confirm password"
                         className="h-12 rounded-xl border-2 pr-12"
                       />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
                       <ErrorMessage
                         name="confirmPassword"
                         component="p"

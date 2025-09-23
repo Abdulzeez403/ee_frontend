@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 
 const API_URL = `${process.env.NEXT_PUBLIC_AUTH}/api`;
 
-
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
@@ -42,19 +41,6 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = false;
 
       try {
-        // const { data } = await axiosInstance.post("/auth/refresh");
-        // // response = { accessToken }
-
-        // if (typeof window !== "undefined") {
-        //   localStorage.setItem(
-        //     "tokens",
-        //     JSON.stringify({ accessToken: data.accessToken })
-        //   );
-        // }
-
-        // originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-        // return axiosInstance(originalRequest);
-
         const { data } = await axiosInstance.post("/auth/refresh");
 
         localStorage.setItem(

@@ -49,7 +49,8 @@ export default function DashboardPage() {
     (state: RootState) => state.quiz
   );
   const { active } = useSelector((state: RootState) => state.dailyChallenges);
-  const { attempt } = useSelector((state: RootState) => state.businessLogic);
+  const { attempts } = useSelector((state: RootState) => state.businessLogic);
+  const attempted = attempts[active?._id as any]?.attempted ?? false;
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -221,15 +222,15 @@ export default function DashboardPage() {
                 {/* Button */}
                 <Link
                   href={
-                    attempt ? "#" : `/quiz?id=${active?._id}&type=challenge`
+                    attempted ? "#" : `/quiz?id=${active?._id}&type=challenge`
                   }
                 >
                   <Button
-                    disabled={!!attempt}
+                    disabled={!!attempted}
                     size="lg"
                     className="w-full sm:w-auto bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 sm:px-8 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {attempt ? "Already Attempted" : "Start Challenge"}
+                    {attempted ? "Already Attempted" : "Start Challenge"}
                     <ChevronRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
                   </Button>
                 </Link>
@@ -249,111 +250,6 @@ export default function DashboardPage() {
                 loading={loading}
                 error={!!error}
               />
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-heading font-bold text-2xl text-gray-900">
-                  Recommended Subjects
-                </h2>
-                <Link
-                  href="/subjects"
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  View All
-                </Link>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                {/* Mathematics */}
-                <Card className="border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all cursor-pointer group">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                        <span className="text-2xl">📐</span>
-                      </div>
-                      <Badge
-                        variant="secondary"
-                        className="bg-blue-100 text-blue-700"
-                      >
-                        JAMB
-                      </Badge>
-                    </div>
-                    <h3 className="font-heading font-semibold text-lg mb-2">
-                      Mathematics
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4">
-                      Master algebra, calculus, and geometry
-                    </p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Progress</span>
-                        <span className="font-medium">68%</span>
-                      </div>
-                      <Progress value={68} className="h-2" />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* English */}
-                <Card className="border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all cursor-pointer group">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors">
-                        <span className="text-2xl">📚</span>
-                      </div>
-                      <Badge
-                        variant="secondary"
-                        className="bg-green-100 text-green-700"
-                      >
-                        WAEC
-                      </Badge>
-                    </div>
-                    <h3 className="font-heading font-semibold text-lg mb-2">
-                      English Language
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4">
-                      Grammar, comprehension, and literature
-                    </p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Progress</span>
-                        <span className="font-medium">82%</span>
-                      </div>
-                      <Progress value={82} className="h-2" />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Physics */}
-                <Card className="border-0 shadow-lg rounded-2xl hover:shadow-xl transition-all cursor-pointer group">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                        <span className="text-2xl">⚛️</span>
-                      </div>
-                      <Badge
-                        variant="secondary"
-                        className="bg-purple-100 text-purple-700"
-                      >
-                        NECO
-                      </Badge>
-                    </div>
-                    <h3 className="font-heading font-semibold text-lg mb-2">
-                      Physics
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4">
-                      Mechanics, waves, and electricity
-                    </p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Progress</span>
-                        <span className="font-medium">45%</span>
-                      </div>
-                      <Progress value={45} className="h-2" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
             </div>
           </div>
 

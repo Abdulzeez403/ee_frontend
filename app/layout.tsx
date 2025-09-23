@@ -1,10 +1,14 @@
+"use client";
 import type React from "react";
 import { Poppins, Nunito } from "next/font/google";
 import "./globals.css";
-import { ReduxProvider } from "./redux_provider";
 import { Toaster } from "@/components/ui/toaster";
 import { loadTokens } from "@/redux/features/authSlice";
 import { store } from "@/redux/store";
+import { ReduxProvider } from "./redux_provider";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 store.dispatch(loadTokens());
 
 const poppins = Poppins({
@@ -26,6 +30,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("tokens");
+    if (!token) {
+      router.replace("/login");
+    }
+  }, [router]);
+
   return (
     <html
       lang="en"
@@ -41,6 +54,6 @@ export default function RootLayout({
   );
 }
 
-export const metadata = {
-  generator: "v0.app",
-};
+// export const metadata = {
+//   generator: "v0.app",
+// };

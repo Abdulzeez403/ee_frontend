@@ -34,40 +34,43 @@ const API_TOKEN = process.env.NEXT_PUBLIC_ALOC_API_TOKEN;
 // ✅ Async thunk to fetch past questions
 export const fetchPastQuestions = createAsyncThunk<
   PastQuestion[], // return type
-  { subject: string; year: number }, // params
+  { subject: string; year: number; type: string }, // params
   { rejectValue: string }
->("pastQuestions/fetch", async ({ subject, year }, { rejectWithValue }) => {
-  try {
-    const response = await axios.get(
-      `${ALOC_BASE_URL}/m?subject=${subject}&year=${year}&type=utme`,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          AccessToken: API_TOKEN!,
-        },
-      }
-    );
+>(
+  "pastQuestions/fetch",
+  async ({ subject, year, type }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${ALOC_BASE_URL}/m?subject=${subject}&year=${year}&type=${type}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            AccessToken: API_TOKEN!,
+          },
+        }
+      );
 
-    // Normalize into your PastQuestion[] shape
-    const normalized: PastQuestion[] = response.data.data.map(
-      (q: any, idx: number) => ({
-        id: `${subject}-${year}-${idx}`,
-        question: q.question,
-        options: Object.values(q.option), // turn {a,b,c,d} → ["", "", "", ""]
-        answer: q.answer, // still "a", "b", etc.
-        subject,
-        year,
-      })
-    );
+      // Normalize into your PastQuestion[] shape
+      const normalized: PastQuestion[] = response.data.data.map(
+        (q: any, idx: number) => ({
+          id: `${subject}-${year}-${idx}`,
+          question: q.question,
+          options: Object.values(q.option), // turn {a,b,c,d} → ["", "", "", ""]
+          answer: q.answer, // still "a", "b", etc.
+          subject,
+          year,
+        })
+      );
 
-    return normalized;
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch past questions"
-    );
+      return normalized;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch past questions"
+      );
+    }
   }
-});
+);
 
 const pastQuestionSlice = createSlice({
   name: "pastQuestions",

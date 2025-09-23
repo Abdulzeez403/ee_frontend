@@ -26,7 +26,10 @@ export default function QuizLists({
   userId,
 }: QuizListProp) {
   const dispatch = useDispatch<AppDispatch>();
-  const { attempt } = useSelector((state: RootState) => state.businessLogic);
+
+  const { attempts } = useSelector((state: RootState) => state.businessLogic);
+
+  // const attempted = attempts[quiz._id]?.attempted ?? false;
 
   // When quizzes load, check attempts for each quiz
   useEffect(() => {
@@ -89,14 +92,9 @@ export default function QuizLists({
           <p className="text-red-600 col-span-3">Error: {error}</p>
         )}
 
-        {/* Show only first 3 quizzes */}
         {!loading && !error && quizzes.length > 0
           ? quizzes.slice(0, 3).map((quiz) => {
-              const attempted =
-                attempt &&
-                attempt.id === quiz._id &&
-                attempt.type === "quiz" &&
-                attempt.attempted;
+              const attempted = attempts[quiz._id as any]?.attempted ?? false;
 
               return (
                 <Link

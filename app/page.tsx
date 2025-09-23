@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,19 +18,24 @@ import {
   Users,
   Target,
   Zap,
+  Menu,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { InteractiveCoinCounter } from "@/components/interactive-coin-counter";
 import { FloatingBadges } from "@/components/floating-badges";
 import { RealTimeActivityFeed } from "@/components/real-time-activity-feed";
 import { SuccessMetricsTicker } from "@/components/success-metrics-ticker";
+import { useState } from "react";
 
 export default function LandingPage() {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
               <BookOpen className="w-5 h-5 text-white" />
@@ -38,6 +44,8 @@ export default function LandingPage() {
               PassRite
             </span>
           </div>
+
+          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             <a
               href="#features"
@@ -68,7 +76,57 @@ export default function LandingPage() {
               </Button>
             </Link>
           </nav>
+
+          {/* Mobile Hamburger */}
+          <button
+            className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        {/* Mobile Nav */}
+        {isOpen && (
+          <div className="md:hidden border-t bg-white shadow-sm">
+            <nav className="flex flex-col gap-4 p-4">
+              <a
+                href="#features"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Features
+              </a>
+              <a
+                href="#testimonials"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Testimonials
+              </a>
+              <a
+                href="#pricing"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Pricing
+              </a>
+              <Link href="/login" onClick={() => setIsOpen(false)}>
+                <Button variant="outline" size="sm" className="w-full">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/signup" onClick={() => setIsOpen(false)}>
+                <Button
+                  size="sm"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  Sign Up
+                </Button>
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -173,7 +231,7 @@ export default function LandingPage() {
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-4xl text-gray-900 mb-4">
-              Why Students Love ExamPrep+
+              Why Students Love PassRite
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Everything you need to ace your exams while earning rewards for
@@ -504,9 +562,7 @@ export default function LandingPage() {
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
                   <BookOpen className="w-5 h-5 text-white" />
                 </div>
-                <span className="font-heading font-bold text-xl">
-                  ExamPrep+
-                </span>
+                <span className="font-heading font-bold text-xl">PassRite</span>
               </div>
               <p className="text-gray-400 mb-4">
                 Empowering African students to excel in their exams while

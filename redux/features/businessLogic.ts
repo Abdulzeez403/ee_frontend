@@ -6,16 +6,17 @@ interface Submission {
   [key: string]: any;
 }
 
-interface Attempt {
-  id: string;
-  type: "quiz" | "challenge" | "past-question";
-  attempted: boolean;
+interface AttemptMap {
+  [referenceId: string]: {
+    attempted: boolean;
+    type: "quiz" | "challenge" | "past-question";
+  };
 }
 
 interface BusinessLogicState {
   coins: number;
   submission: Submission | null;
-  attempt: Attempt | null;
+  attempts: AttemptMap; // ✅ dictionary of attempts
   loading: boolean;
   error: string | null;
 }
@@ -23,7 +24,7 @@ interface BusinessLogicState {
 const initialState: BusinessLogicState = {
   coins: 0,
   submission: null,
-  attempt: null,
+  attempts: {}, // ✅ start empty
   loading: false,
   error: null,
 };
@@ -51,7 +52,7 @@ export const submitQuiz = createAsyncThunk(
   }
 );
 
-// ✅ Check attempt (works for both quiz & challenge)
+// ✅ Check attempt
 export const checkAttempt = createAsyncThunk(
   "logic/checkAttempt",
   async (
@@ -71,7 +72,9 @@ export const checkAttempt = createAsyncThunk(
         `/logic/check/${type}/${referenceId}`,
         { params: { userId } }
       );
-      return { id: referenceId, type, attempted: data.attempted };
+
+      // Backend should return: { referenceId, type, attempted }
+      return { referenceId, type, attempted: data.attempted };
     } catch (err: any) {
       return rejectWithValue(
         err.response?.data?.message || "Error checking attempt"
@@ -102,17 +105,11 @@ const businessLogicSlice = createSlice({
       })
 
       // --- CHECK ATTEMPT ---
-      .addCase(checkAttempt.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(checkAttempt.fulfilled, (state, action) => {
-        state.loading = false;
-        state.attempt = action.payload;
+        const { referenceId, type, attempted } = action.payload;
+        state.attempts[referenceId] = { attempted, type }; // ✅ works now
       })
-
       .addCase(checkAttempt.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload as string;
       });
   },

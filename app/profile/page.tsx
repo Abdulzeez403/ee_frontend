@@ -23,9 +23,11 @@ import {
   TrendingUp,
   CheckCircle,
   Edit3,
+  LogOut,
 } from "lucide-react";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const userProfile = {
   name: "Emeka Nwankwo",
@@ -162,6 +164,12 @@ const subjectProgress = [
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("overview");
   const { user } = useSelector((state: RootState) => state.auth);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("tokens");
+    router.push("/login");
+  };
 
   const getActivityIcon = (type: any) => {
     switch (type) {
@@ -207,13 +215,24 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
-          <Button
-            variant="outline"
-            className="self-start sm:self-auto flex items-center gap-2 bg-transparent"
-          >
-            <Edit3 className="w-4 h-4" />
-            Edit Profile
-          </Button>
+          <div className="flex flex-row sm:flex-row items-start sm:items-center gap-2">
+            <Button
+              variant="outline"
+              className="self-start sm:self-auto flex items-center gap-2 bg-transparent"
+            >
+              <Edit3 className="w-4 h-4" />
+              Edit Profile
+            </Button>
+
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="self-start sm:self-auto flex items-center gap-2 bg-transparent bg-red-700 border-red-300 text-white hover:bg-red-50 hover:border-red-400 hover:text-red-800"
+            >
+              <LogOut className="w-4 h-4" />
+              LogOut
+            </Button>
+          </div>
         </div>
 
         {/* Main Content */}
