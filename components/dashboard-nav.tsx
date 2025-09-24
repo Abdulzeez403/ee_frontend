@@ -16,14 +16,14 @@ export function DashboardNav() {
             <span className="text-xs">Home</span>
           </Button>
         </Link>
-        <Link href="/dashboards/quiz">
+        <Link href="/dashboards/quizzes">
           <Button
             variant="ghost"
             size="sm"
             className="flex flex-col items-center gap-1 h-auto py-2"
           >
             <BookOpen className="w-5 h-5" />
-            <span className="text-xs">Quiz</span>
+            <span className="text-xs">Quizzes</span>
           </Button>
         </Link>
         <Link href="/dashboards/tutor">
