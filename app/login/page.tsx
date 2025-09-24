@@ -118,7 +118,7 @@ export default function LoginPage() {
                       description: "You have logged in successfully.",
                     });
 
-                    router.push("/dashboard");
+                    router.push("/dashboards");
                   } catch (err: any) {
                     toast({
                       title: "Login failed",

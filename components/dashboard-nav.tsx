@@ -16,7 +16,7 @@ export function DashboardNav() {
             <span className="text-xs">Home</span>
           </Button>
         </Link>
-        <Link href="/quiz">
+        <Link href="/dashboards/quiz">
           <Button
             variant="ghost"
             size="sm"
@@ -26,7 +26,7 @@ export function DashboardNav() {
             <span className="text-xs">Quiz</span>
           </Button>
         </Link>
-        <Link href="/tutor">
+        <Link href="/dashboards/tutor">
           <Button
             variant="ghost"
             size="sm"
@@ -46,7 +46,7 @@ export function DashboardNav() {
             <span className="text-xs">Ranks</span>
           </Button>
         </Link> */}
-        <Link href="/shop">
+        <Link href="/dashboards/shop">
           <Button
             variant="ghost"
             size="sm"
@@ -56,7 +56,7 @@ export function DashboardNav() {
             <span className="text-xs">Rewards</span>
           </Button>
         </Link>
-        <Link href="/profile">
+        <Link href="/dashboards/profile">
           <Button
             variant="ghost"
             size="sm"

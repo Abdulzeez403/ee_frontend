@@ -43,6 +43,7 @@ import AirtimeForm from "./forms/airtime";
 import DataBundleForm from "./forms/dataBundle";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { DashboardNav } from "@/components/dashboard-nav";
 
 const rewards = {
   digital: [
@@ -226,59 +227,7 @@ export default function ShopPage() {
           <Coins className="w-5 h-5" />
           <span>{item.price}</span>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              size="sm"
-              className="bg-blue-600 hover:bg-blue-700"
-              disabled={(user?.coins ?? 0) < item.price}
-              onClick={() => {
-                setSelectedItem(item);
-                setVoucherForm({ network: "", mobileNumber: "" });
-                setFormErrors({});
-              }}
-            >
-              {(user?.coins ?? 0) < item.price ? "Not Enough Coins" : "Redeem"}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>
-                {selectedItem && isVoucher(selectedItem)
-                  ? "Redeem Voucher"
-                  : "Confirm Purchase"}
-              </DialogTitle>
-              <DialogDescription>
-                {selectedItem && isVoucher(selectedItem)
-                  ? `Enter your details to redeem ${selectedItem?.name}`
-                  : `Are you sure you want to redeem ${selectedItem?.name} for ${selectedItem?.price} coins?`}
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="flex items-center justify-center py-4">
-              <img
-                src={selectedItem?.image || "/placeholder.svg"}
-                alt={selectedItem?.name}
-                className="w-32 h-32 object-cover rounded-lg"
-              />
-            </div>
-
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setSelectedItem(null)}>
-                Cancel
-              </Button>
-              <Button
-                onClick={() => console.log("Purchasing....")}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                <Coins className="w-4 h-4 mr-2" />
-                {selectedItem && isVoucher(selectedItem)
-                  ? "Redeem Voucher"
-                  : "Confirm Purchase"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button className="bg-gray-400 ">Coming Soon</Button>
       </CardFooter>
     </Card>
   );
@@ -327,8 +276,12 @@ export default function ShopPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs defaultValue="digital" className="w-full">
+        <Tabs defaultValue="vouchers" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsTrigger value="vouchers" className="flex items-center gap-2">
+              <Smartphone className="w-4 h-4" />
+              Vouchers
+            </TabsTrigger>
             <TabsTrigger value="digital" className="flex items-center gap-2">
               <Zap className="w-4 h-4" />
               Digital Rewards
@@ -337,35 +290,9 @@ export default function ShopPage() {
               <Gift className="w-4 h-4" />
               Physical Items
             </TabsTrigger>
-            <TabsTrigger value="vouchers" className="flex items-center gap-2">
-              <Smartphone className="w-4 h-4" />
-              Vouchers
-            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="digital">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {rewards.digital.map((item) => (
-                <RewardCard key={item.id} item={item} />
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="physical">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {rewards.physical.map((item) => (
-                <RewardCard key={item.id} item={item} />
-              ))}
-            </div>
-          </TabsContent>
-
           <TabsContent value="vouchers">
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {rewards.vouchers.map((item) => (
-                <RewardCard key={item.id} item={item} />
-              ))}
-            </div> */}
-
             <Tabs defaultValue="airtime" className=" ">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger
@@ -387,6 +314,22 @@ export default function ShopPage() {
               </TabsContent>
             </Tabs>
           </TabsContent>
+
+          <TabsContent value="physical">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {rewards.physical.map((item) => (
+                <RewardCard key={item.id} item={item} />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="digital">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {rewards.vouchers.map((item) => (
+                <RewardCard key={item.id} item={item} />
+              ))}
+            </div>
+          </TabsContent>
         </Tabs>
 
         {/* Earn More Coins CTA */}
@@ -402,6 +345,7 @@ export default function ShopPage() {
           </Button>
         </div>
       </div>
+      <DashboardNav />
     </div>
   );
 }

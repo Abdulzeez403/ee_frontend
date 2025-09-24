@@ -28,6 +28,7 @@ import {
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { DashboardNav } from "@/components/dashboard-nav";
 
 const userProfile = {
   name: "Emeka Nwankwo",
@@ -511,6 +512,7 @@ export default function ProfilePage() {
           </Tabs>
         </div>
       </div>
+      <DashboardNav />
     </div>
   );
 }

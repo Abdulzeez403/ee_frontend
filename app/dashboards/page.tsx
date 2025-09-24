@@ -34,6 +34,7 @@ import QuizLists from "./components/quizlists";
 import { checkAttempt } from "@/redux/features/businessLogic";
 import { fetchQuizzes } from "@/redux/features/quizSlice";
 import PastQuestionSection from "./components/pastQuestionSection";
+import { DashboardNav } from "@/components/dashboard-nav";
 
 const rankNames: Record<number, string> = {
   1: "🐣 Rookie Egg",
@@ -357,6 +358,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      <DashboardNav />
     </div>
   );
 }
