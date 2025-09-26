@@ -74,6 +74,12 @@ export default function DashboardPage() {
     dispatch(fetchQuizzes());
   }, [dispatch]);
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50">
       {/* Header */}
@@ -116,7 +122,7 @@ export default function DashboardPage() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="font-heading font-bold text-3xl text-gray-900 mb-2">
-            Welcome back, {user?.firstName} 👋
+            👋 Welcome back, {user?.firstName}
           </h1>
           <p className="text-md text-gray-600 md:text-lg lg:text-lg">
             Ready to continue your learning journey and earn more coins?
@@ -204,7 +210,9 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex items-center gap-2 text-sm sm:text-base">
                         <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>{active?.timeLimit} Minutes</span>
+                        <span>
+                          {formatTime(active?.timeLimit ?? 0)} Minutes
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm sm:text-base">
                         <Coins className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -224,7 +232,9 @@ export default function DashboardPage() {
                 {/* Button */}
                 <Link
                   href={
-                    attempted ? "#" : `/quiz?id=${active?._id}&type=challenge`
+                    attempted
+                      ? "#"
+                      : `/dashboards/quiz?id=${active?._id}&type=challenge`
                   }
                 >
                   <Button

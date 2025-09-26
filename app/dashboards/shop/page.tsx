@@ -244,9 +244,6 @@ export default function ShopPage() {
                 <h1 className="text-2xl font-bold text-gray-900">
                   Rewards Shop
                 </h1>
-                <p className="text-gray-600">
-                  Redeem your coins for amazing rewards
-                </p>
               </div>
             </div>
             <div className="flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full">

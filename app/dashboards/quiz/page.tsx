@@ -58,7 +58,7 @@ function QuizPage() {
   } else if (type === "past-question") {
     quizquestion =
       pastQuestions && pastQuestions.length > 0
-        ? { questions: pastQuestions, timeLimit: 40 * 60 } // 40 min default
+        ? { questions: pastQuestions, timeLimit: 30 * 60 } // 40 min default
         : null;
   }
 

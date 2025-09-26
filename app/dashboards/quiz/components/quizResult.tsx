@@ -2,8 +2,9 @@
 
 import BubbleBlast from "@/components/bubbleBlast";
 import { CoinAnimation } from "@/components/coin-animation";
+import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { CheckCircle, Coins, History } from "lucide-react";
+import { ArrowLeft, CheckCircle, Coins, History, Link } from "lucide-react";
 import React from "react";
 
 interface QuizResultsProps {
@@ -109,6 +110,17 @@ export default function QuizResults({
             </div>
           )}
         </CardContent>
+        <Button
+          variant="outline"
+          size="lg"
+          asChild
+          className="w-full rounded-b-3xl border-t-0"
+        >
+          <a href="/dashboards">
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to Dashboard
+          </a>
+        </Button>
       </Card>
     </div>
   );
