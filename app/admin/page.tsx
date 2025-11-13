@@ -1,14 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Progress } from "@/components/ui/progress"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -17,11 +23,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/hooks/use-toast"
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
 import {
   Users,
   BookOpen,
@@ -39,40 +51,46 @@ import {
   PieChart,
   Activity,
   Save,
-} from "lucide-react"
+} from "lucide-react";
 
 interface User {
-  id: number
-  name: string
-  email: string
-  status: "active" | "suspended"
-  coins: number
-  streak: number
+  id: number;
+  name: string;
+  email: string;
+  status: "active" | "suspended";
+  coins: number;
+  streak: number;
 }
 
 interface Question {
-  id: number
-  subject: string
-  topic: string
-  difficulty: "Easy" | "Medium" | "Hard"
-  status: "approved" | "pending" | "rejected"
-  question: string
-  options: string[]
-  correctAnswer: number
+  id: number;
+  subject: string;
+  topic: string;
+  difficulty: "Easy" | "Medium" | "Hard";
+  status: "approved" | "pending" | "rejected";
+  question: string;
+  options: string[];
+  correctAnswer: number;
 }
 
 export default function AdminPanel() {
-  const [activeTab, setActiveTab] = useState("overview")
-  const [searchTerm, setSearchTerm] = useState("")
+  const [activeTab, setActiveTab] = useState("overview");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false)
-  const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false)
-  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false)
-  const [isEditQuestionModalOpen, setIsEditQuestionModalOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
+  const [isEditQuestionModalOpen, setIsEditQuestionModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null
+  );
 
-  const [newUser, setNewUser] = useState({ name: "", email: "", status: "active" as const })
+  const [newUser, setNewUser] = useState({
+    name: "",
+    email: "",
+    status: "active" as const,
+  });
   const [newQuestion, setNewQuestion] = useState({
     subject: "",
     topic: "",
@@ -80,7 +98,7 @@ export default function AdminPanel() {
     question: "",
     options: ["", "", "", ""],
     correctAnswer: 0,
-  })
+  });
 
   // Mock data with enhanced structure
   const stats = {
@@ -88,14 +106,42 @@ export default function AdminPanel() {
     activeUsers: 8932,
     totalQuestions: 2456,
     completedQuizzes: 45678,
-  }
+  };
 
   const [users, setUsers] = useState<User[]>([
-    { id: 1, name: "Adebayo Johnson", email: "adebayo@email.com", status: "active", coins: 1250, streak: 7 },
-    { id: 2, name: "Fatima Okafor", email: "fatima@email.com", status: "active", coins: 890, streak: 12 },
-    { id: 3, name: "Chidi Nwankwo", email: "chidi@email.com", status: "suspended", coins: 450, streak: 0 },
-    { id: 4, name: "Aisha Bello", email: "aisha@email.com", status: "active", coins: 2100, streak: 15 },
-  ])
+    {
+      id: 1,
+      name: "Adebayo Johnson",
+      email: "adebayo@email.com",
+      status: "active",
+      coins: 1250,
+      streak: 7,
+    },
+    {
+      id: 2,
+      name: "Fatima Okafor",
+      email: "fatima@email.com",
+      status: "active",
+      coins: 890,
+      streak: 12,
+    },
+    {
+      id: 3,
+      name: "Chidi Nwankwo",
+      email: "chidi@email.com",
+      status: "suspended",
+      coins: 450,
+      streak: 0,
+    },
+    {
+      id: 4,
+      name: "Aisha Bello",
+      email: "aisha@email.com",
+      status: "active",
+      coins: 2100,
+      streak: 15,
+    },
+  ]);
 
   const [questions, setQuestions] = useState<Question[]>([
     {
@@ -138,7 +184,7 @@ export default function AdminPanel() {
       options: ["CH₄", "C₂H₆", "C₃H₈", "C₄H₁₀"],
       correctAnswer: 0,
     },
-  ])
+  ]);
 
   const handleAddUser = () => {
     if (!newUser.name || !newUser.email) {
@@ -146,8 +192,8 @@ export default function AdminPanel() {
         title: "Error",
         description: "Please fill in all required fields",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     const user: User = {
@@ -157,63 +203,72 @@ export default function AdminPanel() {
       status: newUser.status,
       coins: 0,
       streak: 0,
-    }
+    };
 
-    setUsers([...users, user])
-    setNewUser({ name: "", email: "", status: "active" })
-    setIsAddUserModalOpen(false)
+    setUsers([...users, user]);
+    setNewUser({ name: "", email: "", status: "active" });
+    setIsAddUserModalOpen(false);
     toast({
       title: "Success",
       description: "User added successfully",
-    })
-  }
+    });
+  };
 
   const handleEditUser = (user: User) => {
-    setSelectedUser(user)
-    setIsEditUserModalOpen(true)
-  }
+    setSelectedUser(user);
+    setIsEditUserModalOpen(true);
+  };
 
   const handleUpdateUser = () => {
-    if (!selectedUser) return
+    if (!selectedUser) return;
 
-    setUsers(users.map((u) => (u.id === selectedUser.id ? selectedUser : u)))
-    setIsEditUserModalOpen(false)
-    setSelectedUser(null)
+    setUsers(users.map((u) => (u.id === selectedUser.id ? selectedUser : u)));
+    setIsEditUserModalOpen(false);
+    setSelectedUser(null);
     toast({
       title: "Success",
       description: "User updated successfully",
-    })
-  }
+    });
+  };
 
   const handleToggleUserStatus = (userId: number) => {
     setUsers(
       users.map((user) =>
-        user.id === userId ? { ...user, status: user.status === "active" ? "suspended" : "active" } : user,
-      ),
-    )
+        user.id === userId
+          ? {
+              ...user,
+              status: user.status === "active" ? "suspended" : "active",
+            }
+          : user
+      )
+    );
     toast({
       title: "Success",
       description: "User status updated",
-    })
-  }
+    });
+  };
 
   const handleAddQuestion = () => {
-    if (!newQuestion.subject || !newQuestion.question || newQuestion.options.some((opt) => !opt.trim())) {
+    if (
+      !newQuestion.subject ||
+      !newQuestion.question ||
+      newQuestion.options.some((opt) => !opt.trim())
+    ) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     const question: Question = {
       id: Math.max(...questions.map((q) => q.id)) + 1,
       ...newQuestion,
       status: "pending",
-    }
+    };
 
-    setQuestions([...questions, question])
+    setQuestions([...questions, question]);
     setNewQuestion({
       subject: "",
       topic: "",
@@ -221,149 +276,125 @@ export default function AdminPanel() {
       question: "",
       options: ["", "", "", ""],
       correctAnswer: 0,
-    })
-    setIsAddQuestionModalOpen(false)
+    });
+    setIsAddQuestionModalOpen(false);
     toast({
       title: "Success",
       description: "Question added successfully",
-    })
-  }
+    });
+  };
 
   const handleEditQuestion = (question: Question) => {
-    setSelectedQuestion(question)
-    setIsEditQuestionModalOpen(true)
-  }
+    setSelectedQuestion(question);
+    setIsEditQuestionModalOpen(true);
+  };
 
   const handleUpdateQuestion = () => {
-    if (!selectedQuestion) return
+    if (!selectedQuestion) return;
 
-    setQuestions(questions.map((q) => (q.id === selectedQuestion.id ? selectedQuestion : q)))
-    setIsEditQuestionModalOpen(false)
-    setSelectedQuestion(null)
+    setQuestions(
+      questions.map((q) =>
+        q.id === selectedQuestion.id ? selectedQuestion : q
+      )
+    );
+    setIsEditQuestionModalOpen(false);
+    setSelectedQuestion(null);
     toast({
       title: "Success",
       description: "Question updated successfully",
-    })
-  }
+    });
+  };
 
   const handleDeleteQuestion = (questionId: number) => {
-    setQuestions(questions.filter((q) => q.id !== questionId))
+    setQuestions(questions.filter((q) => q.id !== questionId));
     toast({
       title: "Success",
       description: "Question deleted successfully",
-    })
-  }
+    });
+  };
 
   const handleApproveQuestion = (questionId: number) => {
-    setQuestions(questions.map((q) => (q.id === questionId ? { ...q, status: "approved" as const } : q)))
+    setQuestions(
+      questions.map((q) =>
+        q.id === questionId ? { ...q, status: "approved" as const } : q
+      )
+    );
     toast({
       title: "Success",
       description: "Question approved",
-    })
-  }
+    });
+  };
 
   const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-sans">
-              ExamPrep+ Admin
-            </h1>
-            <p className="text-gray-600 font-sans">Manage your platform efficiently</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" className="border-blue-200 hover:bg-blue-50 bg-transparent">
-              <Settings className="w-4 h-4 mr-2" />
-              Settings
-            </Button>
-            <Avatar className="ring-2 ring-blue-100">
-              <AvatarImage src="/placeholder-32px.png" />
-              <AvatarFallback className="bg-blue-100 text-blue-700">AD</AvatarFallback>
-            </Avatar>
-          </div>
-        </div>
-      </div>
-
       <div className="p-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4 bg-white shadow-sm border">
-            <TabsTrigger
-              value="overview"
-              className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
-            >
-              <BarChart3 className="w-4 h-4" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger
-              value="users"
-              className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
-            >
-              <Users className="w-4 h-4" />
-              Users
-            </TabsTrigger>
-            <TabsTrigger
-              value="questions"
-              className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
-            >
-              <BookOpen className="w-4 h-4" />
-              Questions
-            </TabsTrigger>
-            <TabsTrigger
-              value="analytics"
-              className="flex items-center gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
-            >
-              <TrendingUp className="w-4 h-4" />
-              Analytics
-            </TabsTrigger>
-          </TabsList>
-
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
+          <div className="space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium opacity-90">Total Users</CardTitle>
+                  <CardTitle className="text-sm font-medium opacity-90">
+                    Total Users
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats.totalUsers.toLocaleString()}</div>
+                  <div className="text-2xl font-bold">
+                    {stats.totalUsers.toLocaleString()}
+                  </div>
                   <p className="text-xs opacity-90">+12% from last month</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium opacity-90">Active Users</CardTitle>
+                  <CardTitle className="text-sm font-medium opacity-90">
+                    Active Users
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats.activeUsers.toLocaleString()}</div>
+                  <div className="text-2xl font-bold">
+                    {stats.activeUsers.toLocaleString()}
+                  </div>
                   <p className="text-xs opacity-90">+8% from last month</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium opacity-90">Total Questions</CardTitle>
+                  <CardTitle className="text-sm font-medium opacity-90">
+                    Total Questions
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats.totalQuestions.toLocaleString()}</div>
+                  <div className="text-2xl font-bold">
+                    {stats.totalQuestions.toLocaleString()}
+                  </div>
                   <p className="text-xs opacity-90">+156 this week</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium opacity-90">Completed Quizzes</CardTitle>
+                  <CardTitle className="text-sm font-medium opacity-90">
+                    Completed Quizzes
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats.completedQuizzes.toLocaleString()}</div>
+                  <div className="text-2xl font-bold">
+                    {stats.completedQuizzes.toLocaleString()}
+                  </div>
                   <p className="text-xs opacity-90">+23% from last month</p>
                 </CardContent>
               </Card>
@@ -383,21 +414,27 @@ export default function AdminPanel() {
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">New user registered</p>
-                      <p className="text-xs text-gray-500">Kemi Adebayo joined 2 minutes ago</p>
+                      <p className="text-xs text-gray-500">
+                        Kemi Adebayo joined 2 minutes ago
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">Quiz completed</p>
-                      <p className="text-xs text-gray-500">Mathematics quiz by Tunde Okafor</p>
+                      <p className="text-xs text-gray-500">
+                        Mathematics quiz by Tunde Okafor
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">Question submitted</p>
-                      <p className="text-xs text-gray-500">Physics question pending review</p>
+                      <p className="text-xs text-gray-500">
+                        Physics question pending review
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -413,25 +450,37 @@ export default function AdminPanel() {
                 <CardContent className="space-y-3">
                   <Alert>
                     <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>Server load is higher than usual. Consider scaling resources.</AlertDescription>
+                    <AlertDescription>
+                      Server load is higher than usual. Consider scaling
+                      resources.
+                    </AlertDescription>
                   </Alert>
                   <Alert>
                     <CheckCircle className="h-4 w-4" />
-                    <AlertDescription>Database backup completed successfully at 2:00 AM.</AlertDescription>
+                    <AlertDescription>
+                      Database backup completed successfully at 2:00 AM.
+                    </AlertDescription>
                   </Alert>
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+          </div>
 
           {/* Users Tab */}
-          <TabsContent value="users" className="space-y-6">
+          {/* <TabsContent value="users" className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
-                <p className="text-gray-600">Manage user accounts and permissions</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  User Management
+                </h2>
+                <p className="text-gray-600">
+                  Manage user accounts and permissions
+                </p>
               </div>
-              <Dialog open={isAddUserModalOpen} onOpenChange={setIsAddUserModalOpen}>
+              <Dialog
+                open={isAddUserModalOpen}
+                onOpenChange={setIsAddUserModalOpen}
+              >
                 <DialogTrigger asChild>
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     <Plus className="w-4 h-4 mr-2" />
@@ -441,7 +490,9 @@ export default function AdminPanel() {
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Add New User</DialogTitle>
-                    <DialogDescription>Create a new user account for the platform.</DialogDescription>
+                    <DialogDescription>
+                      Create a new user account for the platform.
+                    </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
@@ -449,7 +500,9 @@ export default function AdminPanel() {
                       <Input
                         id="name"
                         value={newUser.name}
-                        onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                        onChange={(e) =>
+                          setNewUser({ ...newUser, name: e.target.value })
+                        }
                         placeholder="Enter full name"
                       />
                     </div>
@@ -459,7 +512,9 @@ export default function AdminPanel() {
                         id="email"
                         type="email"
                         value={newUser.email}
-                        onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                        onChange={(e) =>
+                          setNewUser({ ...newUser, email: e.target.value })
+                        }
                         placeholder="Enter email address"
                       />
                     </div>
@@ -467,7 +522,9 @@ export default function AdminPanel() {
                       <Label htmlFor="status">Status</Label>
                       <Select
                         value={newUser.status}
-                        onValueChange={(value: "active" | "suspended") => setNewUser({ ...newUser, status: value })}
+                        onValueChange={(value: "active" | "suspended") =>
+                          setNewUser({ ...newUser, status: value as any })
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -480,10 +537,16 @@ export default function AdminPanel() {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsAddUserModalOpen(false)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddUserModalOpen(false)}
+                    >
                       Cancel
                     </Button>
-                    <Button onClick={handleAddUser} className="bg-blue-600 hover:bg-blue-700">
+                    <Button
+                      onClick={handleAddUser}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
                       <Save className="w-4 h-4 mr-2" />
                       Add User
                     </Button>
@@ -510,16 +573,29 @@ export default function AdminPanel() {
                   <table className="w-full">
                     <thead className="bg-gray-50 border-b">
                       <tr>
-                        <th className="text-left p-4 font-semibold text-gray-900">User</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Status</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Coins</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Streak</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Actions</th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          User
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Status
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Coins
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Streak
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredUsers.map((user) => (
-                        <tr key={user.id} className="border-b hover:bg-blue-50/50 transition-colors">
+                        <tr
+                          key={user.id}
+                          className="border-b hover:bg-blue-50/50 transition-colors"
+                        >
                           <td className="p-4">
                             <div className="flex items-center gap-3">
                               <Avatar>
@@ -532,28 +608,48 @@ export default function AdminPanel() {
                                 </AvatarFallback>
                               </Avatar>
                               <div>
-                                <p className="font-medium text-gray-900">{user.name}</p>
-                                <p className="text-sm text-gray-500">{user.email}</p>
+                                <p className="font-medium text-gray-900">
+                                  {user.name}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  {user.email}
+                                </p>
                               </div>
                             </div>
                           </td>
                           <td className="p-4">
                             <Badge
-                              variant={user.status === "active" ? "default" : "destructive"}
-                              className={user.status === "active" ? "bg-green-100 text-green-800" : ""}
+                              variant={
+                                user.status === "active"
+                                  ? "default"
+                                  : "destructive"
+                              }
+                              className={
+                                user.status === "active"
+                                  ? "bg-green-100 text-green-800"
+                                  : ""
+                              }
                             >
                               {user.status}
                             </Badge>
                           </td>
                           <td className="p-4">
-                            <span className="font-medium text-yellow-600">{user.coins}</span>
+                            <span className="font-medium text-yellow-600">
+                              {user.coins}
+                            </span>
                           </td>
                           <td className="p-4">
-                            <span className="font-medium">{user.streak} days</span>
+                            <span className="font-medium">
+                              {user.streak} days
+                            </span>
                           </td>
                           <td className="p-4">
                             <div className="flex items-center gap-2">
-                              <Button variant="ghost" size="sm" className="hover:bg-blue-50">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="hover:bg-blue-50"
+                              >
                                 <Eye className="w-4 h-4" />
                               </Button>
                               <Button
@@ -582,11 +678,16 @@ export default function AdminPanel() {
               </CardContent>
             </Card>
 
-            <Dialog open={isEditUserModalOpen} onOpenChange={setIsEditUserModalOpen}>
+            <Dialog
+              open={isEditUserModalOpen}
+              onOpenChange={setIsEditUserModalOpen}
+            >
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Edit User</DialogTitle>
-                  <DialogDescription>Update user information and settings.</DialogDescription>
+                  <DialogDescription>
+                    Update user information and settings.
+                  </DialogDescription>
                 </DialogHeader>
                 {selectedUser && (
                   <div className="space-y-4">
@@ -595,7 +696,12 @@ export default function AdminPanel() {
                       <Input
                         id="edit-name"
                         value={selectedUser.name}
-                        onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
+                        onChange={(e) =>
+                          setSelectedUser({
+                            ...selectedUser,
+                            name: e.target.value,
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -604,7 +710,12 @@ export default function AdminPanel() {
                         id="edit-email"
                         type="email"
                         value={selectedUser.email}
-                        onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
+                        onChange={(e) =>
+                          setSelectedUser({
+                            ...selectedUser,
+                            email: e.target.value,
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -614,7 +725,10 @@ export default function AdminPanel() {
                         type="number"
                         value={selectedUser.coins}
                         onChange={(e) =>
-                          setSelectedUser({ ...selectedUser, coins: Number.parseInt(e.target.value) || 0 })
+                          setSelectedUser({
+                            ...selectedUser,
+                            coins: Number.parseInt(e.target.value) || 0,
+                          })
                         }
                       />
                     </div>
@@ -625,33 +739,49 @@ export default function AdminPanel() {
                         type="number"
                         value={selectedUser.streak}
                         onChange={(e) =>
-                          setSelectedUser({ ...selectedUser, streak: Number.parseInt(e.target.value) || 0 })
+                          setSelectedUser({
+                            ...selectedUser,
+                            streak: Number.parseInt(e.target.value) || 0,
+                          })
                         }
                       />
                     </div>
                   </div>
                 )}
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsEditUserModalOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsEditUserModalOpen(false)}
+                  >
                     Cancel
                   </Button>
-                  <Button onClick={handleUpdateUser} className="bg-blue-600 hover:bg-blue-700">
+                  <Button
+                    onClick={handleUpdateUser}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
                     <Save className="w-4 h-4 mr-2" />
                     Update User
                   </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-          </TabsContent>
+          </TabsContent> */}
 
           {/* Questions Tab */}
-          <TabsContent value="questions" className="space-y-6">
+          {/* <TabsContent value="questions" className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Question Management</h2>
-                <p className="text-gray-600">Review and manage quiz questions</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Question Management
+                </h2>
+                <p className="text-gray-600">
+                  Review and manage quiz questions
+                </p>
               </div>
-              <Dialog open={isAddQuestionModalOpen} onOpenChange={setIsAddQuestionModalOpen}>
+              <Dialog
+                open={isAddQuestionModalOpen}
+                onOpenChange={setIsAddQuestionModalOpen}
+              >
                 <DialogTrigger asChild>
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     <Plus className="w-4 h-4 mr-2" />
@@ -661,7 +791,9 @@ export default function AdminPanel() {
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>Add New Question</DialogTitle>
-                    <DialogDescription>Create a new quiz question for the platform.</DialogDescription>
+                    <DialogDescription>
+                      Create a new quiz question for the platform.
+                    </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 max-h-96 overflow-y-auto">
                     <div className="grid grid-cols-2 gap-4">
@@ -669,13 +801,17 @@ export default function AdminPanel() {
                         <Label htmlFor="subject">Subject</Label>
                         <Select
                           value={newQuestion.subject}
-                          onValueChange={(value) => setNewQuestion({ ...newQuestion, subject: value })}
+                          onValueChange={(value) =>
+                            setNewQuestion({ ...newQuestion, subject: value })
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Select subject" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Mathematics">Mathematics</SelectItem>
+                            <SelectItem value="Mathematics">
+                              Mathematics
+                            </SelectItem>
                             <SelectItem value="English">English</SelectItem>
                             <SelectItem value="Physics">Physics</SelectItem>
                             <SelectItem value="Chemistry">Chemistry</SelectItem>
@@ -688,7 +824,12 @@ export default function AdminPanel() {
                         <Input
                           id="topic"
                           value={newQuestion.topic}
-                          onChange={(e) => setNewQuestion({ ...newQuestion, topic: e.target.value })}
+                          onChange={(e) =>
+                            setNewQuestion({
+                              ...newQuestion,
+                              topic: e.target.value,
+                            })
+                          }
                           placeholder="Enter topic"
                         />
                       </div>
@@ -698,7 +839,10 @@ export default function AdminPanel() {
                       <Select
                         value={newQuestion.difficulty}
                         onValueChange={(value: "Easy" | "Medium" | "Hard") =>
-                          setNewQuestion({ ...newQuestion, difficulty: value })
+                          setNewQuestion({
+                            ...newQuestion,
+                            difficulty: value as any,
+                          })
                         }
                       >
                         <SelectTrigger>
@@ -716,7 +860,12 @@ export default function AdminPanel() {
                       <Textarea
                         id="question"
                         value={newQuestion.question}
-                        onChange={(e) => setNewQuestion({ ...newQuestion, question: e.target.value })}
+                        onChange={(e) =>
+                          setNewQuestion({
+                            ...newQuestion,
+                            question: e.target.value,
+                          })
+                        }
                         placeholder="Enter the question"
                         rows={3}
                       />
@@ -728,30 +877,54 @@ export default function AdminPanel() {
                           <Input
                             value={option}
                             onChange={(e) => {
-                              const newOptions = [...newQuestion.options]
-                              newOptions[index] = e.target.value
-                              setNewQuestion({ ...newQuestion, options: newOptions })
+                              const newOptions = [...newQuestion.options];
+                              newOptions[index] = e.target.value;
+                              setNewQuestion({
+                                ...newQuestion,
+                                options: newOptions,
+                              });
                             }}
                             placeholder={`Option ${index + 1}`}
                           />
                           <Button
                             type="button"
-                            variant={newQuestion.correctAnswer === index ? "default" : "outline"}
+                            variant={
+                              newQuestion.correctAnswer === index
+                                ? "default"
+                                : "outline"
+                            }
                             size="sm"
-                            onClick={() => setNewQuestion({ ...newQuestion, correctAnswer: index })}
-                            className={newQuestion.correctAnswer === index ? "bg-green-600 hover:bg-green-700" : ""}
+                            onClick={() =>
+                              setNewQuestion({
+                                ...newQuestion,
+                                correctAnswer: index,
+                              })
+                            }
+                            className={
+                              newQuestion.correctAnswer === index
+                                ? "bg-green-600 hover:bg-green-700"
+                                : ""
+                            }
                           >
-                            {newQuestion.correctAnswer === index ? "Correct" : "Mark Correct"}
+                            {newQuestion.correctAnswer === index
+                              ? "Correct"
+                              : "Mark Correct"}
                           </Button>
                         </div>
                       ))}
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsAddQuestionModalOpen(false)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddQuestionModalOpen(false)}
+                    >
                       Cancel
                     </Button>
-                    <Button onClick={handleAddQuestion} className="bg-blue-600 hover:bg-blue-700">
+                    <Button
+                      onClick={handleAddQuestion}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
                       <Save className="w-4 h-4 mr-2" />
                       Add Question
                     </Button>
@@ -766,33 +939,50 @@ export default function AdminPanel() {
                   <table className="w-full">
                     <thead className="bg-gray-50 border-b">
                       <tr>
-                        <th className="text-left p-4 font-semibold text-gray-900">Subject</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Topic</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Difficulty</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Status</th>
-                        <th className="text-left p-4 font-semibold text-gray-900">Actions</th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Subject
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Topic
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Difficulty
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Status
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-900">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {questions.map((question) => (
-                        <tr key={question.id} className="border-b hover:bg-blue-50/50 transition-colors">
-                          <td className="p-4 font-medium text-gray-900">{question.subject}</td>
-                          <td className="p-4 text-gray-700">{question.topic}</td>
+                        <tr
+                          key={question.id}
+                          className="border-b hover:bg-blue-50/50 transition-colors"
+                        >
+                          <td className="p-4 font-medium text-gray-900">
+                            {question.subject}
+                          </td>
+                          <td className="p-4 text-gray-700">
+                            {question.topic}
+                          </td>
                           <td className="p-4">
                             <Badge
                               variant={
                                 question.difficulty === "Easy"
                                   ? "secondary"
                                   : question.difficulty === "Medium"
-                                    ? "default"
-                                    : "destructive"
+                                  ? "default"
+                                  : "destructive"
                               }
                               className={
                                 question.difficulty === "Easy"
                                   ? "bg-green-100 text-green-800"
                                   : question.difficulty === "Medium"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-red-100 text-red-800"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
                               }
                             >
                               {question.difficulty}
@@ -804,15 +994,15 @@ export default function AdminPanel() {
                                 question.status === "approved"
                                   ? "default"
                                   : question.status === "pending"
-                                    ? "secondary"
-                                    : "destructive"
+                                  ? "secondary"
+                                  : "destructive"
                               }
                               className={
                                 question.status === "approved"
                                   ? "bg-green-100 text-green-800"
                                   : question.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-red-100 text-red-800"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
                               }
                             >
                               {question.status}
@@ -820,7 +1010,11 @@ export default function AdminPanel() {
                           </td>
                           <td className="p-4">
                             <div className="flex items-center gap-2">
-                              <Button variant="ghost" size="sm" className="hover:bg-blue-50">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="hover:bg-blue-50"
+                              >
                                 <Eye className="w-4 h-4" />
                               </Button>
                               <Button
@@ -835,7 +1029,9 @@ export default function AdminPanel() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => handleApproveQuestion(question.id)}
+                                  onClick={() =>
+                                    handleApproveQuestion(question.id)
+                                  }
                                   className="hover:bg-green-50 text-green-600"
                                 >
                                   <CheckCircle className="w-4 h-4" />
@@ -844,7 +1040,9 @@ export default function AdminPanel() {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleDeleteQuestion(question.id)}
+                                onClick={() =>
+                                  handleDeleteQuestion(question.id)
+                                }
                                 className="hover:bg-red-50 text-red-600"
                               >
                                 <Trash2 className="w-4 h-4" />
@@ -859,11 +1057,16 @@ export default function AdminPanel() {
               </CardContent>
             </Card>
 
-            <Dialog open={isEditQuestionModalOpen} onOpenChange={setIsEditQuestionModalOpen}>
+            <Dialog
+              open={isEditQuestionModalOpen}
+              onOpenChange={setIsEditQuestionModalOpen}
+            >
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Edit Question</DialogTitle>
-                  <DialogDescription>Update question information and settings.</DialogDescription>
+                  <DialogDescription>
+                    Update question information and settings.
+                  </DialogDescription>
                 </DialogHeader>
                 {selectedQuestion && (
                   <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -872,13 +1075,20 @@ export default function AdminPanel() {
                         <Label htmlFor="edit-subject">Subject</Label>
                         <Select
                           value={selectedQuestion.subject}
-                          onValueChange={(value) => setSelectedQuestion({ ...selectedQuestion, subject: value })}
+                          onValueChange={(value) =>
+                            setSelectedQuestion({
+                              ...selectedQuestion,
+                              subject: value,
+                            })
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Mathematics">Mathematics</SelectItem>
+                            <SelectItem value="Mathematics">
+                              Mathematics
+                            </SelectItem>
                             <SelectItem value="English">English</SelectItem>
                             <SelectItem value="Physics">Physics</SelectItem>
                             <SelectItem value="Chemistry">Chemistry</SelectItem>
@@ -891,7 +1101,12 @@ export default function AdminPanel() {
                         <Input
                           id="edit-topic"
                           value={selectedQuestion.topic}
-                          onChange={(e) => setSelectedQuestion({ ...selectedQuestion, topic: e.target.value })}
+                          onChange={(e) =>
+                            setSelectedQuestion({
+                              ...selectedQuestion,
+                              topic: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>
@@ -900,7 +1115,10 @@ export default function AdminPanel() {
                       <Select
                         value={selectedQuestion.difficulty}
                         onValueChange={(value: "Easy" | "Medium" | "Hard") =>
-                          setSelectedQuestion({ ...selectedQuestion, difficulty: value })
+                          setSelectedQuestion({
+                            ...selectedQuestion,
+                            difficulty: value,
+                          })
                         }
                       >
                         <SelectTrigger>
@@ -918,7 +1136,12 @@ export default function AdminPanel() {
                       <Textarea
                         id="edit-question"
                         value={selectedQuestion.question}
-                        onChange={(e) => setSelectedQuestion({ ...selectedQuestion, question: e.target.value })}
+                        onChange={(e) =>
+                          setSelectedQuestion({
+                            ...selectedQuestion,
+                            question: e.target.value,
+                          })
+                        }
                         rows={3}
                       />
                     </div>
@@ -929,22 +1152,38 @@ export default function AdminPanel() {
                           <Input
                             value={option}
                             onChange={(e) => {
-                              const newOptions = [...selectedQuestion.options]
-                              newOptions[index] = e.target.value
-                              setSelectedQuestion({ ...selectedQuestion, options: newOptions })
+                              const newOptions = [...selectedQuestion.options];
+                              newOptions[index] = e.target.value;
+                              setSelectedQuestion({
+                                ...selectedQuestion,
+                                options: newOptions,
+                              });
                             }}
                             placeholder={`Option ${index + 1}`}
                           />
                           <Button
                             type="button"
-                            variant={selectedQuestion.correctAnswer === index ? "default" : "outline"}
+                            variant={
+                              selectedQuestion.correctAnswer === index
+                                ? "default"
+                                : "outline"
+                            }
                             size="sm"
-                            onClick={() => setSelectedQuestion({ ...selectedQuestion, correctAnswer: index })}
+                            onClick={() =>
+                              setSelectedQuestion({
+                                ...selectedQuestion,
+                                correctAnswer: index,
+                              })
+                            }
                             className={
-                              selectedQuestion.correctAnswer === index ? "bg-green-600 hover:bg-green-700" : ""
+                              selectedQuestion.correctAnswer === index
+                                ? "bg-green-600 hover:bg-green-700"
+                                : ""
                             }
                           >
-                            {selectedQuestion.correctAnswer === index ? "Correct" : "Mark Correct"}
+                            {selectedQuestion.correctAnswer === index
+                              ? "Correct"
+                              : "Mark Correct"}
                           </Button>
                         </div>
                       ))}
@@ -952,23 +1191,31 @@ export default function AdminPanel() {
                   </div>
                 )}
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsEditQuestionModalOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsEditQuestionModalOpen(false)}
+                  >
                     Cancel
                   </Button>
-                  <Button onClick={handleUpdateQuestion} className="bg-blue-600 hover:bg-blue-700">
+                  <Button
+                    onClick={handleUpdateQuestion}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
                     <Save className="w-4 h-4 mr-2" />
                     Update Question
                   </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-          </TabsContent>
+          </TabsContent> */}
 
           {/* Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-6">
+          {/* <TabsContent value="analytics" className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold">Analytics Dashboard</h2>
-              <p className="text-gray-600">Track platform performance and user engagement</p>
+              <p className="text-gray-600">
+                Track platform performance and user engagement
+              </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1054,28 +1301,36 @@ export default function AdminPanel() {
             <Card>
               <CardHeader>
                 <CardTitle>Performance Metrics</CardTitle>
-                <CardDescription>Key performance indicators for the platform</CardDescription>
+                <CardDescription>
+                  Key performance indicators for the platform
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">94.2%</div>
+                    <div className="text-2xl font-bold text-blue-600">
+                      94.2%
+                    </div>
                     <p className="text-sm text-gray-600">System Uptime</p>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">1.2s</div>
+                    <div className="text-2xl font-bold text-green-600">
+                      1.2s
+                    </div>
                     <p className="text-sm text-gray-600">Avg Response Time</p>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-yellow-600">4.8/5</div>
+                    <div className="text-2xl font-bold text-yellow-600">
+                      4.8/5
+                    </div>
                     <p className="text-sm text-gray-600">User Satisfaction</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </div>
     </div>
-  )
+  );
 }

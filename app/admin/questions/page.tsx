@@ -1,16 +1,37 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { AdminNav } from "@/components/admin-nav"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Filter, Plus, Edit, Trash2, ChevronDown, ChevronRight, BookOpen } from "lucide-react"
+import { useState } from "react";
+import { AdminNav } from "@/components/admin-nav";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Search,
+  Filter,
+  Plus,
+  Edit,
+  Trash2,
+  ChevronDown,
+  ChevronRight,
+  BookOpen,
+} from "lucide-react";
 
 const subjectsData = [
   {
@@ -61,8 +82,14 @@ const subjectsData = [
       },
       {
         id: 5,
-        question: "Identify the figure of speech: 'The wind whispered through the trees'",
-        options: ["A) Metaphor", "B) Simile", "C) Personification", "D) Hyperbole"],
+        question:
+          "Identify the figure of speech: 'The wind whispered through the trees'",
+        options: [
+          "A) Metaphor",
+          "B) Simile",
+          "C) Personification",
+          "D) Hyperbole",
+        ],
         correctAnswer: "C",
         difficulty: "Medium",
         exam: "WAEC",
@@ -118,61 +145,72 @@ const subjectsData = [
       {
         id: 9,
         question: "Which organelle is known as the powerhouse of the cell?",
-        options: ["A) Nucleus", "B) Mitochondria", "C) Ribosome", "D) Golgi apparatus"],
+        options: [
+          "A) Nucleus",
+          "B) Mitochondria",
+          "C) Ribosome",
+          "D) Golgi apparatus",
+        ],
         correctAnswer: "B",
         difficulty: "Medium",
         exam: "JAMB",
       },
     ],
   },
-]
+];
 
 export default function AdminQuestionsPage() {
-  const [expandedSubjects, setExpandedSubjects] = useState<number[]>([1])
-  const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false)
-  const [selectedSubject, setSelectedSubject] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
+  const [expandedSubjects, setExpandedSubjects] = useState<number[]>([1]);
+  const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const toggleSubject = (subjectId: number) => {
     setExpandedSubjects((prev) =>
-      prev.includes(subjectId) ? prev.filter((id) => id !== subjectId) : [...prev, subjectId],
-    )
-  }
+      prev.includes(subjectId)
+        ? prev.filter((id) => id !== subjectId)
+        : [...prev, subjectId]
+    );
+  };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "Easy":
-        return "bg-green-100 text-green-700"
+        return "bg-green-100 text-green-700";
       case "Medium":
-        return "bg-yellow-100 text-yellow-700"
+        return "bg-yellow-100 text-yellow-700";
       case "Hard":
-        return "bg-red-100 text-red-700"
+        return "bg-red-100 text-red-700";
       default:
-        return "bg-gray-100 text-gray-700"
+        return "bg-gray-100 text-gray-700";
     }
-  }
+  };
 
   const getExamColor = (exam: string) => {
     switch (exam) {
       case "JAMB":
-        return "bg-blue-100 text-blue-700"
+        return "bg-blue-100 text-blue-700";
       case "WAEC":
-        return "bg-purple-100 text-purple-700"
+        return "bg-purple-100 text-purple-700";
       case "NECO":
-        return "bg-orange-100 text-orange-700"
+        return "bg-orange-100 text-orange-700";
       default:
-        return "bg-gray-100 text-gray-700"
+        return "bg-gray-100 text-gray-700";
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminNav />
 
-      <div className="lg:ml-64 p-8">
+      <div className=" p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Question Management</h1>
-          <p className="text-gray-600">Create and manage quiz questions organized by subjects</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Question Management
+          </h1>
+          <p className="text-gray-600">
+            Create and manage quiz questions organized by subjects
+          </p>
         </div>
 
         <div className="flex items-center justify-between mb-6">
@@ -206,7 +244,10 @@ export default function AdminQuestionsPage() {
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="subject">Subject</Label>
-                  <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+                  <Select
+                    value={selectedSubject}
+                    onValueChange={setSelectedSubject}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select subject" />
                     </SelectTrigger>
@@ -284,10 +325,15 @@ export default function AdminQuestionsPage() {
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsAddQuestionOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsAddQuestionOpen(false)}
+                  >
                     Cancel
                   </Button>
-                  <Button onClick={() => setIsAddQuestionOpen(false)}>Add Question</Button>
+                  <Button onClick={() => setIsAddQuestionOpen(false)}>
+                    Add Question
+                  </Button>
                 </div>
               </div>
             </DialogContent>
@@ -311,11 +357,16 @@ export default function AdminQuestionsPage() {
                     <div className="text-2xl">{subject.icon}</div>
                     <div>
                       <CardTitle className="text-lg">{subject.name}</CardTitle>
-                      <p className="text-sm text-gray-600">{subject.questionCount} questions</p>
+                      <p className="text-sm text-gray-600">
+                        {subject.questionCount} questions
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700">
+                    <Badge
+                      variant="outline"
+                      className="bg-blue-50 text-blue-700"
+                    >
                       {subject.questionCount} Questions
                     </Badge>
                     <Button variant="ghost" size="sm">
@@ -329,20 +380,37 @@ export default function AdminQuestionsPage() {
                 <CardContent className="pt-0">
                   <div className="space-y-3">
                     {subject.questions.map((question) => (
-                      <div key={question.id} className="p-4 border rounded-lg bg-white">
+                      <div
+                        key={question.id}
+                        className="p-4 border rounded-lg bg-white"
+                      >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
-                            <p className="font-medium mb-2">{question.question}</p>
+                            <p className="font-medium mb-2">
+                              {question.question}
+                            </p>
                             <div className="flex items-center gap-2 mb-2">
-                              <Badge className={getDifficultyColor(question.difficulty)}>{question.difficulty}</Badge>
-                              <Badge className={getExamColor(question.exam)}>{question.exam}</Badge>
+                              <Badge
+                                className={getDifficultyColor(
+                                  question.difficulty
+                                )}
+                              >
+                                {question.difficulty}
+                              </Badge>
+                              <Badge className={getExamColor(question.exam)}>
+                                {question.exam}
+                              </Badge>
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
                             <Button variant="ghost" size="sm">
                               <Edit className="w-4 h-4" />
                             </Button>
-                            <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-600 hover:text-red-700"
+                            >
                               <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>
@@ -371,5 +439,5 @@ export default function AdminQuestionsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

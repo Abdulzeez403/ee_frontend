@@ -105,7 +105,7 @@ export default function DashboardPage() {
               </div>
 
               {/* User Avatar */}
-              <Link href="/profile">
+              <Link href="/dashboards/profile">
                 <Avatar className="w-10 h-10 cursor-pointer">
                   <AvatarImage src="/placeholder.svg?height=40&width=40" />
                   <AvatarFallback className="bg-blue-600 text-white font-semibold">

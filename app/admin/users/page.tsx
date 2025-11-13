@@ -1,22 +1,26 @@
-"use client"
+"use client";
 
-import { AdminNav } from "@/components/admin-nav"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Search, Filter, MoreHorizontal, UserPlus } from "lucide-react"
+import { AdminNav } from "@/components/admin-nav";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Search, Filter, MoreHorizontal, UserPlus } from "lucide-react";
 
 export default function AdminUsersPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminNav />
+      {/* <AdminNav /> */}
 
-      <div className="lg:ml-64 p-8">
+      <div className=" p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
-          <p className="text-gray-600">Manage student accounts and monitor activity</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            User Management
+          </h1>
+          <p className="text-gray-600">
+            Manage student accounts and monitor activity
+          </p>
         </div>
 
         <div className="flex items-center justify-between mb-6">
@@ -43,14 +47,19 @@ export default function AdminUsersPage() {
           <CardContent>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
                   <div className="flex items-center gap-4">
                     <Avatar>
                       <AvatarFallback>U{i}</AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="font-medium">User {i}</p>
-                      <p className="text-sm text-gray-500">user{i}@example.com</p>
+                      <p className="text-sm text-gray-500">
+                        user{i}@example.com
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -66,5 +75,5 @@ export default function AdminUsersPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

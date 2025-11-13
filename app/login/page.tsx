@@ -31,7 +31,9 @@ const LoginSchema = Yup.object().shape({
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const { error, loading } = useSelector((state: RootState) => state.auth);
+  const { error, loading, user } = useSelector(
+    (state: RootState) => state.auth
+  );
   const dispatch = useDispatch<AppDispatch>();
   const { toast } = useToast();
   const router = useRouter();
@@ -47,7 +49,7 @@ export default function LoginPage() {
                 <BookOpen className="w-7 h-7 text-white" />
               </div>
               <span className="font-heading font-bold text-2xl text-gray-900">
-                ExamPrep+
+                PassRite
               </span>
             </div>
 
@@ -118,7 +120,11 @@ export default function LoginPage() {
                       description: "You have logged in successfully.",
                     });
 
-                    router.push("/dashboards");
+                    if (user?.role === "admin") {
+                      router.push("/admin");
+                    } else {
+                      router.push("/dashboards");
+                    }
                   } catch (err: any) {
                     toast({
                       title: "Login failed",
