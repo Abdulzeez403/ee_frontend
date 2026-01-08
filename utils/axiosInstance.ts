@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
 
     // Handle expired access token → refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = false;
+      originalRequest._retry = true;
 
       try {
         const { data } = await axiosInstance.post("/auth/refresh");

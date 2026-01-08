@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useSearchParams } from "next/navigation";
@@ -10,13 +10,14 @@ import { fetchQuiz } from "@/redux/features/quizSlice";
 import { fetchChallenge } from "@/redux/features/dailyChallenge";
 import { fetchPastQuestions } from "@/redux/features/pastQuestionSlice";
 import { submitQuiz } from "@/redux/features/businessLogic";
+import { fetchProfile } from "@/redux/features/authSlice";
 
 // components
 import QuizHeader from "./components/quizHeader";
 import QuizActive from "./components/quizActive";
 import QuizResults from "./components/quizResult";
 import QuizStart from "./components/quizStart";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 function QuizPage() {
   const searchParams = useSearchParams();
@@ -49,18 +50,16 @@ function QuizPage() {
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
   const { toast } = useToast();
 
-  // decide quiz source (normalize to always have .questions + .timeLimit)
-  let quizquestion: any = null;
-  if (type === "quiz") {
-    quizquestion = quiz;
-  } else if (type === "challenge") {
-    quizquestion = active;
-  } else if (type === "past-question") {
-    quizquestion =
-      pastQuestions && pastQuestions.length > 0
-        ? { questions: pastQuestions, timeLimit: 30 * 60 } // 40 min default
+  const quizquestion = useMemo(() => {
+    if (type === "quiz") return quiz;
+    if (type === "challenge") return active;
+    if (type === "past-question") {
+      return pastQuestions && pastQuestions.length > 0
+        ? { questions: pastQuestions, timeLimit: 40 * 60 }
         : null;
-  }
+    }
+    return null;
+  }, [type, quiz, active, pastQuestions]);
 
   // fetch data
   useEffect(() => {
@@ -84,10 +83,10 @@ function QuizPage() {
 
   // set timer when quiz loads
   useEffect(() => {
-    if (quizquestion?.timeLimit) {
+    if (quizState === "start" && quizquestion?.timeLimit) {
       setTimeLeft(quizquestion.timeLimit);
     }
-  }, [quizquestion]);
+  }, [quizState, quizquestion?.timeLimit]);
 
   // countdown
   useEffect(() => {
@@ -170,6 +169,8 @@ function QuizPage() {
           type: type as "quiz" | "challenge" | "past-question",
         })
       ).unwrap();
+
+      await dispatch(fetchProfile()).unwrap();
 
       setQuizState("results");
       setShowCoinAnimation(true);

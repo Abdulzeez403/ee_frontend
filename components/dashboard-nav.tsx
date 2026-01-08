@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Home, Trophy, Gift, User, Brain } from "lucide-react";
+import { BookOpen, Home, Trophy, Gift, User, Brain, Crown } from "lucide-react";
 import Link from "next/link";
 
 export function DashboardNav() {
@@ -45,7 +45,7 @@ export function DashboardNav() {
             <Trophy className="w-5 h-5" />
             <span className="text-xs">Ranks</span>
           </Button>
-        </Link> */}
+        </Link> 
         <Link href="/dashboards/shop">
           <Button
             variant="ghost"
@@ -54,6 +54,16 @@ export function DashboardNav() {
           >
             <Gift className="w-5 h-5" />
             <span className="text-xs">Rewards</span>
+          </Button>
+        </Link>*/}
+        <Link href="/dashboards/membership">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex flex-col items-center gap-1 h-auto py-2"
+          >
+            <Crown className="w-5 h-5" />
+            <span className="text-xs">Member</span>
           </Button>
         </Link>
         <Link href="/dashboards/profile">

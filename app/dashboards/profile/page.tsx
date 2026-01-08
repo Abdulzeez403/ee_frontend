@@ -192,10 +192,10 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-lg shadow">
           <div className="flex items-center gap-4 sm:gap-6">
             <Avatar className="w-16 h-16 sm:w-20 sm:h-20">
-              <AvatarImage
+              {/* <AvatarImage
                 src={user?.avatar || "/placeholder.svg"}
                 alt={user?.firstName + " " + user?.lastName}
-              />
+              /> */}
               <AvatarFallback className="text-lg sm:text-xl">EN</AvatarFallback>
             </Avatar>
             <div>
@@ -260,7 +260,7 @@ export default function ProfilePage() {
                   <CardContent className="p-4 text-center">
                     <Coins className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
                     <div className="text-2xl font-bold text-gray-900">
-                      {user?.coins.toLocaleString()}
+                      {/* {user?.coins.toLocaleString()} */}
                     </div>
                     <div className="text-sm text-gray-600">Total Coins</div>
                   </CardContent>
@@ -269,7 +269,7 @@ export default function ProfilePage() {
                   <CardContent className="p-4 text-center">
                     <Flame className="w-8 h-8 text-orange-500 mx-auto mb-2" />
                     <div className="text-2xl font-bold text-gray-900">
-                      {user?.streak}
+                      {/* {user?.streak} */}
                     </div>
                     <div className="text-sm text-gray-600">Day Streak</div>
                   </CardContent>

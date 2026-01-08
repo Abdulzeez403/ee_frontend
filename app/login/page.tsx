@@ -113,14 +113,14 @@ export default function LoginPage() {
                 validationSchema={LoginSchema}
                 onSubmit={async (values, { setSubmitting }) => {
                   try {
-                    await dispatch(loginUser(values)).unwrap();
+                    const result = await dispatch(loginUser(values)).unwrap();
 
                     toast({
                       title: "Welcome back! 🎉",
                       description: "You have logged in successfully.",
                     });
 
-                    if (user?.role === "admin") {
+                    if (result?.user?.role === "admin") {
                       router.push("/admin");
                     } else {
                       router.push("/dashboards");

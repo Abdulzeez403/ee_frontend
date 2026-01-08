@@ -1,14 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { purchaseData } from "@/redux/features/reward";
 import { NetworkProviders } from "@/app/constant/networProvider";
 import { Input } from "@/components/ui/input";
+import {
+  fetchSubscriptionStatus,
+  initializeSubscription,
+} from "@/redux/features/subscription";
 
 const DataFormSchema = Yup.object().shape({
   phone: Yup.string().required("Phone number is Required"),
@@ -21,12 +25,30 @@ export const DataBundleForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const { loading } = useSelector((state: RootState) => state.coins);
+  const subscription = useSelector((state: RootState) => state.subscription);
 
   const [selectedNetwork, setSelectedNetwork] = useState<string>("");
   const [selectedDataPlan, setSelectedDataPlan] = useState<string>("");
   const { toast } = useToast();
 
+  useEffect(() => {
+    dispatch(fetchSubscriptionStatus());
+  }, [dispatch]);
+
   const handleSubmit = async (values: any) => {
+    if (!subscription.isActive) {
+      toast({
+        title: "Membership required",
+        description: "Subscribe to buy data with coins.",
+      });
+      const result = await dispatch(initializeSubscription());
+      if (initializeSubscription.fulfilled.match(result)) {
+        const url = result.payload?.authorization_url;
+        if (url) window.location.href = url;
+      }
+      return;
+    }
+
     const userPoints = user?.coins ?? 0;
     const dataPlanAmount =
       Number(selectedDataPlan.replace("MB", "").replace("GB", "")) *
@@ -41,8 +63,9 @@ export const DataBundleForm: React.FC = () => {
       try {
         const payload = {
           phone: values.phone,
-          network: selectedNetwork.toUpperCase(),
-          dataPlan: selectedDataPlan,
+          networkId: selectedNetwork,
+          planId: selectedDataPlan,
+          amount: dataPlanAmount,
         };
 
         await dispatch(purchaseData(payload as any));
@@ -69,6 +92,11 @@ export const DataBundleForm: React.FC = () => {
       >
         {({ isSubmitting, setFieldValue, errors, touched }) => (
           <Form className="space-y-6">
+            {!subscription.isActive && (
+              <div className="rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+                Subscribe to unlock data purchases with coins.
+              </div>
+            )}
             {/* Network selection */}
             <div>
               <h3 className="text-lg font-semibold mb-3 text-gray-700">
@@ -163,11 +191,30 @@ export const DataBundleForm: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
-                disabled={isSubmitting || loading}
+                disabled={isSubmitting || loading || !subscription.isActive}
               >
                 {loading ? "Processing..." : "Purchase Data"}
               </Button>
             </div>
+
+            {!subscription.isActive && (
+              <div className="text-center">
+                <Button
+                  type="button"
+                  className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+                  disabled={subscription.loading}
+                  onClick={async () => {
+                    const result = await dispatch(initializeSubscription());
+                    if (initializeSubscription.fulfilled.match(result)) {
+                      const url = result.payload?.authorization_url;
+                      if (url) window.location.href = url;
+                    }
+                  }}
+                >
+                  {subscription.loading ? "Redirecting..." : "Subscribe"}
+                </Button>
+              </div>
+            )}
           </Form>
         )}
       </Formik>

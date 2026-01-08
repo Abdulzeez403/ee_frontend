@@ -47,6 +47,7 @@ const rankNames: Record<number, string> = {
 
 export default function DashboardPage() {
   const { user } = useSelector((state: RootState) => state.auth);
+  const userprofile = user?.userProfile;
   const { loading, error, quizzes } = useSelector(
     (state: RootState) => state.quiz
   );
@@ -100,7 +101,7 @@ export default function DashboardPage() {
               <div className="flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full">
                 <Coins className="w-5 h-5 text-yellow-600" />
                 <span className="font-semibold text-yellow-800">
-                  {user?.coins}
+                  {userprofile?.stats.coins}
                 </span>
               </div>
 
@@ -147,7 +148,7 @@ export default function DashboardPage() {
                     </Badge>
                   </div>
                   <h3 className="font-heading font-bold text-2xl mb-1">
-                    {user?.streak} Days
+                    {user?.userProfile?.stats.currentStreak} Days
                   </h3>
                   <p className="text-white/80">Study Streak</p>
                 </CardContent>
@@ -161,11 +162,11 @@ export default function DashboardPage() {
                       <Coins className="w-6 h-6 text-white" />
                     </div>
                     <Badge className="bg-white/20 text-white border-white/30">
-                      {user?.coins} today
+                      {userprofile?.stats.coins} today
                     </Badge>
                   </div>
                   <h3 className="font-heading font-bold text-2xl mb-1">
-                    {user?.coins}
+                    {userprofile?.stats.coins}
                   </h3>
                   <p className="text-white/80">Total Coins</p>
                 </CardContent>
@@ -183,7 +184,7 @@ export default function DashboardPage() {
                     </Badge>
                   </div>
                   <h3 className="font-heading font-bold text-2xl mb-1">
-                    {rankNames[user?.level as any] || "🌟 Legend"}
+                    {rankNames[userprofile?.stats?.level as any] || "🌟 Legend"}
                   </h3>
 
                   <p className="text-white/80">Your Rank</p>
@@ -330,7 +331,7 @@ export default function DashboardPage() {
                   <div>
                     <p className="font-medium text-sm">Week Warrior</p>
                     <p className="text-xs text-gray-600">
-                      ${user?.streak}-day study streak
+                      {userprofile?.stats.currentStreak}-day study streak
                     </p>
                   </div>
                 </div>
@@ -354,7 +355,7 @@ export default function DashboardPage() {
                   <div>
                     <p className="font-medium text-sm">Coin Collector</p>
                     <p className="text-xs text-gray-600">
-                      {user?.coins} coins earned
+                      {userprofile?.stats.coins} coins earned
                     </p>
                   </div>
                 </div>
@@ -362,8 +363,8 @@ export default function DashboardPage() {
             </Card>
 
             <StreakCalendar
-              streak={user?.streak as any}
-              lastActivity={user?.lastActivity as any}
+              streak={userprofile?.stats.longestStreak as any}
+              lastActivity={userprofile?.activityLog[0] as any}
             />
           </div>
         </div>

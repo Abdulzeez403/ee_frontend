@@ -384,66 +384,68 @@ export default function SignUpPage() {
                       />
                     </div>
 
-                    {/* Password */}
-                    {/* Password */}
-                    <div className="space-y-2 relative">
-                      <Label htmlFor="password">Password</Label>
-                      <Field
-                        as={Input}
-                        name="password"
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Create a strong password"
-                        className="h-12 rounded-xl border-2 pr-12"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
-                      >
-                        {showPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
-                      </button>
-                      <ErrorMessage
-                        name="password"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Password */}
+                      <div className="space-y-2 relative">
+                        <Label htmlFor="password">Password</Label>
+                        <Field
+                          as={Input}
+                          name="password"
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Create a strong password"
+                          className="h-12 rounded-xl border-2 pr-12"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                        >
+                          {showPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
+                        </button>
+                        <ErrorMessage
+                          name="password"
+                          component="p"
+                          className="text-red-500 text-sm"
+                        />
+                      </div>
 
-                    {/* Confirm Password */}
-                    {/* Confirm Password */}
-                    <div className="space-y-2 relative">
-                      <Label htmlFor="confirmPassword">Confirm Password</Label>
-                      <Field
-                        as={Input}
-                        name="confirmPassword"
-                        id="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Confirm password"
-                        className="h-12 rounded-xl border-2 pr-12"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
-                      >
-                        {showConfirmPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
-                      </button>
-                      <ErrorMessage
-                        name="confirmPassword"
-                        component="p"
-                        className="text-red-500 text-sm"
-                      />
+                      {/* Confirm Password */}
+                      <div className="space-y-2 relative">
+                        <Label htmlFor="confirmPassword">
+                          Confirm Password
+                        </Label>
+                        <Field
+                          as={Input}
+                          name="confirmPassword"
+                          id="confirmPassword"
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirm password"
+                          className="h-12 rounded-xl border-2 pr-12"
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
+                        </button>
+                        <ErrorMessage
+                          name="confirmPassword"
+                          component="p"
+                          className="text-red-500 text-sm"
+                        />
+                      </div>
                     </div>
 
                     {/* Terms */}
